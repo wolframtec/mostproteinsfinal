@@ -8,10 +8,11 @@ import { useCart, type Product } from '../context';
 interface ProductPageProps {
   product: Product;
   onBack: () => void;
+  onCartClick?: () => void;
 }
 
-export default function ProductPage({ product, onBack }: ProductPageProps) {
-  const { addItem } = useCart();
+export default function ProductPage({ product, onBack, onCartClick }: ProductPageProps) {
+  const { addItem, count } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
 
@@ -35,6 +36,14 @@ export default function ProductPage({ product, onBack }: ProductPageProps) {
           <Beaker className="w-5 h-5 text-biotech-mint" />
           <span className="font-heading font-bold text-biotech-white">Most Proteins</span>
         </div>
+        {/* Cart Button */}
+        <button 
+          onClick={onCartClick}
+          className="flex items-center gap-2 px-4 py-2 bg-biotech-dark/80 backdrop-blur-sm border border-biotech-white/10 rounded-full hover:border-biotech-mint/50 transition-colors"
+        >
+          <ShoppingCart className="w-4 h-4 text-biotech-mint" />
+          <span className="text-sm text-biotech-white">{count}</span>
+        </button>
       </nav>
 
       {/* FDA Warning Banner */}

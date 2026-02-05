@@ -785,6 +785,7 @@ function AppContent() {
         <ProductPage 
           product={selectedProduct} 
           onBack={() => setCurrentView('home')} 
+          onCartClick={() => setIsCartOpen(true)}
         />
       </Suspense>
     );
