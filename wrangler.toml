@@ -3,8 +3,7 @@ compatibility_date = "2024-01-01"
 compatibility_flags = ["nodejs_compat"]
 
 # Cloudflare Pages build configuration
-# Build command: npx @cloudflare/next-on-pages@1
-pages_build_output_dir = ".vercel/output/static"
+pages_build_output_dir = "dist"
 
 # Build environment variables (available during npm run build)
 [vars]

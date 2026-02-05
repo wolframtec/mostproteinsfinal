@@ -1,0 +1,10 @@
+# Cloudflare Pages Redirects
+# https://developers.cloudflare.com/pages/configuration/redirects/
+
+# Redirect non-trailing slash to trailing slash for SEO
+/product/:slug /product/:slug/ 301
+/about /about/ 301
+/privacy /privacy/ 301
+/terms /terms/ 301
+/checkout /checkout/ 301
+/checkout/complete /checkout/complete/ 301

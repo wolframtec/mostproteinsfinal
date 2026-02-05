@@ -4,20 +4,37 @@ import { Providers } from './providers';
 import { SiteOverlays } from './site-overlays';
 
 const siteUrl = 'https://mostproteins.com';
-
-export const runtime = 'edge';
+const siteName = 'Most Proteins';
+const defaultDescription = 'Most Proteins provides research peptides and compounds with clear documentation and reliable handling. For research use only.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'Most Proteins | Research Peptides & Compounds',
-    template: '%s | Most Proteins',
+    default: `${siteName} | Research Peptides & Compounds`,
+    template: `%s | ${siteName}`,
   },
-  description:
-    'Most Proteins provides research peptides and compounds with clear documentation and reliable handling. For research use only.',
+  description: defaultDescription,
+  keywords: [
+    'research peptides',
+    'research compounds',
+    'peptide research',
+    'HPLC purity',
+    'COA',
+    'laboratory supplies',
+    'BPC-157',
+    'GHK-Cu',
+    'Epithalon',
+    'TB-500',
+    'CJC-1295',
+    'GHRP-2',
+  ],
+  authors: [{ name: 'Most Proteins' }],
+  creator: 'Most Proteins',
+  publisher: 'Most Proteins',
   robots: {
     index: true,
     follow: true,
+    nocache: false,
     googleBot: {
       index: true,
       follow: true,
@@ -28,73 +45,176 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: '/',
+    languages: {
+      'en-US': '/',
+    },
   },
   openGraph: {
-    title: 'Most Proteins | Research Peptides & Compounds',
-    description:
-      'Most Proteins provides research peptides and compounds with clear documentation and reliable handling. For research use only.',
+    title: `${siteName} | Research Peptides & Compounds`,
+    description: defaultDescription,
     type: 'website',
     url: siteUrl,
-    siteName: 'Most Proteins',
+    siteName: siteName,
+    locale: 'en_US',
     images: [
       {
         url: '/images/bpc157-product.jpg',
         width: 1200,
         height: 630,
-        alt: 'Most Proteins research peptides',
+        alt: 'Most Proteins - Research-grade peptides with HPLC purity certificates',
+        type: 'image/jpeg',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Most Proteins | Research Peptides & Compounds',
-    description:
-      'Most Proteins provides research peptides and compounds with clear documentation and reliable handling. For research use only.',
+    title: `${siteName} | Research Peptides & Compounds`,
+    description: defaultDescription,
     images: ['/images/bpc157-product.jpg'],
+    creator: '@mostproteins',
+    site: '@mostproteins',
+  },
+  verification: {
+    google: 'YOUR_GOOGLE_VERIFICATION_CODE', // Add your Google Search Console verification
+  },
+  category: 'Science & Research',
+  classification: 'Research Chemicals',
+  other: {
+    'facebook-domain-verification': 'YOUR_FACEBOOK_VERIFICATION', // Add if using Facebook Pixel
   },
 };
 
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
+  maximumScale: 5,
+  themeColor: [
+    { media: '(prefers-color-scheme: dark)', color: '#0B0C10' },
+    { media: '(prefers-color-scheme: light)', color: '#0B0C10' },
+  ],
+};
+
+// Organization Schema
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: siteName,
+  url: siteUrl,
+  logo: `${siteUrl}/images/bpc157-product.jpg`,
+  description: defaultDescription,
+  sameAs: [
+    // Add social media URLs when available
+    // 'https://twitter.com/mostproteins',
+    // 'https://linkedin.com/company/mostproteins',
+  ],
+  contactPoint: {
+    '@type': 'ContactPoint',
+    email: 'research@mostproteins.com',
+    contactType: 'Research Support',
+    availableLanguage: ['English'],
+  },
+};
+
+// Website Schema with Search
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: siteName,
+  url: siteUrl,
+  description: defaultDescription,
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: `${siteUrl}/search?q={search_term_string}`,
+    },
+    'query-input': 'required name=search_term_string',
+  },
+};
+
+// Local Business Schema
+const localBusinessSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: siteName,
+  description: defaultDescription,
+  url: siteUrl,
+  image: `${siteUrl}/images/bpc157-product.jpg`,
+  priceRange: '$$$',
+  currenciesAccepted: 'USD',
+  paymentAccepted: 'Credit Card',
+  areaServed: 'US',
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Research Peptides',
+    itemListElement: [
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Product',
+          name: 'BPC-157',
+          description: 'Research peptide for tissue repair studies',
+        },
+      },
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Product',
+          name: 'GHK-Cu',
+          description: 'Copper peptide for matrix research',
+        },
+      },
+    ],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const orgJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: 'Most Proteins',
-    url: siteUrl,
-    logo: `${siteUrl}/images/bpc157-product.jpg`,
-  };
-
-  const websiteJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    name: 'Most Proteins',
-    url: siteUrl,
-  };
-
   return (
-    <html lang="en">
+    <html lang="en" dir="ltr">
       <head>
         <meta name="theme-color" content="#0B0C10" />
         <meta name="format-detection" content="telephone=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content={siteName} />
+        <meta name="application-name" content={siteName} />
+        <meta name="msapplication-TileColor" content="#0B0C10" />
+        <meta name="msapplication-config" content="/browserconfig.xml" />
+        
+        {/* Preconnect for performance */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        
+        {/* DNS Prefetch */}
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+        
+        {/* Favicon */}
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="alternate icon" type="image/png" href="/favicon.png" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        
+        {/* Manifest */}
+        <link rel="manifest" href="/site.webmanifest" />
       </head>
       <body>
         <Providers>
           {children}
           <SiteOverlays />
         </Providers>
+        
+        {/* Structured Data */}
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
         />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
         />
       </body>
     </html>

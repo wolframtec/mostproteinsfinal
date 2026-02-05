@@ -1,0 +1,17 @@
+/* TEAM */
+Company: Most Proteins
+Site: https://mostproteins.com
+Location: United States
+
+/* THANKS */
+Research Community: For advancing peptide science
+
+/* SITE */
+Last update: 2026-02-05
+Standards: HTML5, CSS3, ES2022
+Components: Next.js, React, TypeScript, Tailwind CSS
+Software: Research peptide documentation systems
+
+/* RESEARCH NOTICE */
+All products sold on this site are strictly for research purposes only.
+Not for human consumption. Must be 21+ to purchase.
