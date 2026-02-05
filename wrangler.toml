@@ -7,7 +7,7 @@ pages_build_output_dir = "dist"
 
 # Environment variables for build (these are baked into the build)
 [env.production.vars]
-VITE_API_URL = "https://mostproteins-api.justbreatheaire.workers.dev/api"
+VITE_API_URL = "https://mostproteinsfinal.justbreatheaire.workers.dev/api"
 
 # For local development
 [env.development.vars]
