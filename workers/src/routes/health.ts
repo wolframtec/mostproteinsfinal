@@ -12,7 +12,7 @@ router.get('/', async (request, env, ctx) => {
   // Check database connection
   let dbStatus = 'ok';
   try {
-    const result = await env.DB.prepare('SELECT 1 as check').first();
+    const result = await env.DB.prepare('SELECT 1 as health_check').first();
     if (!result) {
       dbStatus = 'error';
     }
