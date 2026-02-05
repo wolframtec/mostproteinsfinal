@@ -999,7 +999,7 @@ function AppContent() {
             MOST PROTEINS
           </h1>
           <p className="hero-content text-lg md:text-xl text-biotech-gray max-w-2xl mx-auto mb-8">
-            MOST: Measurable, Observable, Strictly Traceable — built for the most demanding labs.
+            MOST OF ALL.
           </p>
           <button
             onClick={() => document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' })}
