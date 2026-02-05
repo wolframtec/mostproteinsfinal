@@ -24,23 +24,9 @@ export function IntroThenLoopVideo({
   const [showIntro, setShowIntro] = useState(true);
   const [introEnded, setIntroEnded] = useState(false);
   const [skipIntro, setSkipIntro] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    // Check if mobile
-    const checkMobile = () => {
-      setIsMobile(window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 768);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  useEffect(() => {
-    if (isMobile) return;
-
     // Check if intro was recently played
     const checkRecentPlay = () => {
       const playedAt = localStorage.getItem(STORAGE_KEY);
@@ -61,10 +47,10 @@ export function IntroThenLoopVideo({
     };
 
     checkRecentPlay();
-  }, [isMobile, rememberDurationMinutes]);
+  }, [rememberDurationMinutes]);
 
   useEffect(() => {
-    if (isMobile || skipIntro) return;
+    if (skipIntro) return;
 
     const introVideo = introVideoRef.current;
     const loopVideo = loopVideoRef.current;
@@ -100,7 +86,7 @@ export function IntroThenLoopVideo({
         introVideo.removeEventListener('ended', handleIntroEnded);
       };
     }
-  }, [isMobile, skipIntro]);
+  }, [skipIntro]);
 
   useEffect(() => {
     if (skipIntro && loopVideoRef.current) {
@@ -111,18 +97,6 @@ export function IntroThenLoopVideo({
     }
   }, [skipIntro]);
 
-  // On mobile, return fallback
-  if (isMobile) {
-    return (
-      <div 
-        className="fixed inset-0 z-0 bg-biotech-black"
-        style={{
-          background: 'radial-gradient(ellipse at center, #1a1d26 0%, #0B0C10 100%)'
-        }}
-      />
-    );
-  }
-
   return (
     <div className="fixed inset-0 z-0 overflow-hidden">
       {/* Intro Video (plays once, then crossfades) */}
@@ -132,9 +106,10 @@ export function IntroThenLoopVideo({
           muted
           playsInline
           poster={posterSrc}
+          onLoadedData={() => setIsLoaded(true)}
           className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
             introEnded ? 'opacity-0' : 'opacity-100'
-          }`}
+          } ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
           style={{ objectFit: 'cover', objectPosition: 'center center' }}
         >
           <source src={introSrc} type="video/mp4" />

@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
-import { ShoppingCart, ChevronRight, Dna } from 'lucide-react';
+import { ShoppingCart, ChevronRight, Dna, Menu, X } from 'lucide-react';
 import { useCart, type Product } from './context';
 import { PRODUCTS } from './data/products';
 import { ProductCard } from './components/ProductCard';
@@ -239,24 +239,27 @@ function HomePageClient() {
       </div> */}
 
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-center justify-between bg-gradient-to-b from-biotech-black/80 to-transparent">
+      <nav className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 py-4 flex items-center justify-between bg-gradient-to-b from-biotech-black/80 to-transparent">
         <Link href="/" className="flex items-center gap-2">
-          <Dna className="w-6 h-6 text-biotech-mint" />
-          <span className="text-lg font-heading font-bold text-biotech-white">Most Proteins</span>
+          <Dna className="w-5 h-5 sm:w-6 sm:h-6 text-biotech-mint" />
+          <span className="text-base sm:text-lg font-heading font-bold text-biotech-white">Most Proteins</span>
         </Link>
-        <div className="flex items-center gap-6">
-          <Link href="/shop" className="text-sm text-biotech-mint font-medium hover:text-biotech-white transition-colors">
-            Shop
-          </Link>
-          <Link href="/" className="text-sm text-biotech-gray hover:text-biotech-white transition-colors">
-            Products
-          </Link>
-          <Link href="/about" className="text-sm text-biotech-gray hover:text-biotech-white transition-colors">
-            About
-          </Link>
-          <a href="#subscribe" className="text-sm text-biotech-gray hover:text-biotech-white transition-colors">
-            Contact
-          </a>
+        
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center gap-6">
+          {navLinks.map((link) => (
+            <Link 
+              key={link.href}
+              href={link.href}
+              className={`text-sm transition-colors ${
+                link.highlight 
+                  ? 'text-biotech-mint font-medium hover:text-biotech-white' 
+                  : 'text-biotech-gray hover:text-biotech-white'
+              }`}
+            >
+              {link.label}
+            </Link>
+          ))}
           <button
             onClick={() => setIsCartOpen(true)}
             className="flex items-center gap-2 px-4 py-2 bg-biotech-dark/80 backdrop-blur-sm border border-biotech-white/10 rounded-full hover:border-biotech-mint/50 transition-colors"
@@ -265,7 +268,53 @@ function HomePageClient() {
             <span className="text-sm text-biotech-white">{count}</span>
           </button>
         </div>
+
+        {/* Mobile Navigation */}
+        <div className="flex md:hidden items-center gap-3">
+          <button
+            onClick={() => setIsCartOpen(true)}
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-biotech-dark/80 backdrop-blur-sm border border-biotech-white/10 rounded-full"
+          >
+            <ShoppingCart className="w-4 h-4 text-biotech-mint" />
+            <span className="text-sm text-biotech-white">{count}</span>
+          </button>
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="p-2 text-biotech-white"
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </div>
       </nav>
+
+      {/* Mobile Menu Overlay */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-40 md:hidden">
+          <div 
+            className="absolute inset-0 bg-biotech-black/95 backdrop-blur-xl"
+            onClick={() => setMobileMenuOpen(false)}
+          />
+          <div className="absolute top-16 left-0 right-0 p-6">
+            <div className="flex flex-col gap-4">
+              {navLinks.map((link) => (
+                <Link 
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`text-lg py-3 border-b border-biotech-white/10 transition-colors ${
+                    link.highlight 
+                      ? 'text-biotech-mint font-medium' 
+                      : 'text-biotech-white'
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Hero Section */}
       <section ref={heroRef} className="section-pinned flex items-center justify-center z-10">
