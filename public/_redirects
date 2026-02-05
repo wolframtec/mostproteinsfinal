@@ -6,6 +6,7 @@
 
 # Redirect non-trailing slash to trailing slash for SEO
 /product/:slug /product/:slug/ 301
+/shop /shop/ 301
 /about /about/ 301
 /privacy /privacy/ 301
 /terms /terms/ 301

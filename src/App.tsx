@@ -264,7 +264,7 @@ function HomePageClient() {
             onClick={() => document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' })}
             className="hero-content btn-primary inline-flex items-center gap-2"
           >
-            Browse Research Materials
+            Browse
             <ChevronRight className="w-4 h-4" />
           </button>
           <p className="hero-content mt-16 text-sm text-biotech-gray/60 font-mono">
