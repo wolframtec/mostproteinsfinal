@@ -9,18 +9,14 @@ pages_build_output_dir = "dist"
 command = "npm run build"
 
 # Environment variables for production
-[env.production]
-vars = { 
-  VITE_API_URL = "https://mostproteins-api.justbreatheaire.workers.dev",
-  VITE_STRIPE_PUBLIC_KEY = "pk_live_51S4XlR0SClXAcjAhi1w6BkuRdEZaYBtsVLZXf9wg4LyriUJmWL9ztKzco7jUhmSbm35Sw9DXpuKTwnUd8iy8SUUj00bAEHhFna"
-}
+[env.production.vars]
+VITE_API_URL = "https://mostproteins-api.justbreatheaire.workers.dev"
+VITE_STRIPE_PUBLIC_KEY = "pk_live_51S4XlR0SClXAcjAhi1w6BkuRdEZaYBtsVLZXf9wg4LyriUJmWL9ztKzco7jUhmSbm35Sw9DXpuKTwnUd8iy8SUUj00bAEHhFna"
 
 # Environment variables for staging
-[env.staging]
-vars = { 
-  VITE_API_URL = "https://mostproteins-api-staging.justbreatheaire.workers.dev",
-  VITE_STRIPE_PUBLIC_KEY = "pk_live_51S4XlR0SClXAcjAhi1w6BkuRdEZaYBtsVLZXf9wg4LyriUJmWL9ztKzco7jUhmSbm35Sw9DXpuKTwnUd8iy8SUUj00bAEHhFna"
-}
+[env.staging.vars]
+VITE_API_URL = "https://mostproteins-api-staging.justbreatheaire.workers.dev"
+VITE_STRIPE_PUBLIC_KEY = "pk_live_51S4XlR0SClXAcjAhi1w6BkuRdEZaYBtsVLZXf9wg4LyriUJmWL9ztKzco7jUhmSbm35Sw9DXpuKTwnUd8iy8SUUj00bAEHhFna"
 
 # Headers for security and caching
 [[headers]]
