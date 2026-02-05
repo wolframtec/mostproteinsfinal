@@ -11,6 +11,7 @@ database_id = "d562328f-a378-4477-a89c-935d07664726"
 # Environment variables (non-sensitive)
 [vars]
 NODE_ENV = "production"
+ALLOWED_ORIGINS = "https://mostproteins.com,https://www.mostproteins.com,https://*.pages.dev,https://*.justbreatheaire.workers.dev"
 
 # Secrets (set via: wrangler secret put STRIPE_SECRET_KEY)
 # STRIPE_SECRET_KEY
