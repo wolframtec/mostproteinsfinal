@@ -150,7 +150,16 @@ export async function createPaymentIntent(
     currency: params.currency.toLowerCase(),
     'metadata[order_id]': params.orderId,
     'receipt_email': params.customerEmail,
-    automatic_payment_methods: JSON.stringify({ enabled: true }),
+    automatic_payment_methods: JSON.stringify({ 
+      enabled: true,
+      allow_redirects: 'never'
+    }),
+    // Enable Apple Pay and other wallet payment methods
+    payment_method_options: JSON.stringify({
+      card: {
+        request_three_d_secure: 'automatic'
+      }
+    }),
     ...params.metadata,
   }, stripeKey);
   

@@ -1,19 +1,66 @@
-import { useState } from 'react';
-import { PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import { Lock, AlertCircle, CheckCircle } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { 
+  PaymentElement, 
+  useStripe, 
+  useElements,
+  ExpressCheckoutElement 
+} from '@stripe/react-stripe-js';
+import { Lock, AlertCircle, CheckCircle, Wallet } from 'lucide-react';
 
 interface PaymentFormProps {
   clientSecret: string;
   onSuccess: () => void;
   onError: (error: string) => void;
+  totalAmount: number;
 }
 
-export function PaymentForm({ clientSecret: _clientSecret, onSuccess, onError }: PaymentFormProps) {
+export function PaymentForm({ clientSecret: _clientSecret, onSuccess, onError, totalAmount }: PaymentFormProps) {
   const stripe = useStripe();
   const elements = useElements();
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
   const [paymentStatus, setPaymentStatus] = useState<'idle' | 'processing' | 'succeeded'>('idle');
+  const [expressCheckoutReady, setExpressCheckoutReady] = useState(false);
+
+  // Handle Express Checkout (Apple Pay / Google Pay)
+  const handleExpressCheckout = async (event: any) => {
+    if (!stripe) return;
+
+    setIsProcessing(true);
+    setPaymentError(null);
+    setPaymentStatus('processing');
+
+    try {
+      const { error, paymentIntent } = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: `${window.location.origin}/checkout/complete`,
+        },
+        redirect: 'if_required',
+      });
+
+      if (error) {
+        setPaymentError(error.message || 'Payment failed. Please try again.');
+        onError(error.message || 'Payment failed');
+        setPaymentStatus('idle');
+        event.complete('fail');
+      } else if (paymentIntent?.status === 'succeeded') {
+        setPaymentStatus('succeeded');
+        event.complete('success');
+        onSuccess();
+      } else {
+        event.complete('success');
+      }
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Payment processing failed';
+      setPaymentError(errorMessage);
+      onError(errorMessage);
+      setPaymentStatus('idle');
+      event.complete('fail');
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,10 +115,54 @@ export function PaymentForm({ clientSecret: _clientSecret, onSuccess, onError }:
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Express Checkout - Apple Pay / Google Pay */}
+      <div className="bg-biotech-black/50 border border-biotech-white/20 rounded-xl p-4">
+        <label className="block text-sm text-biotech-gray mb-3 flex items-center gap-2">
+          <Wallet className="w-4 h-4" />
+          Quick Checkout
+        </label>
+        <ExpressCheckoutElement
+          onReady={() => setExpressCheckoutReady(true)}
+          onClick={({ resolve }) => {
+            resolve({
+              lineItems: [
+                {
+                  name: 'Research Order',
+                  amount: totalAmount,
+                },
+              ],
+            });
+          }}
+          onConfirm={handleExpressCheckout}
+          options={{
+            buttonType: {
+              applePay: 'buy',
+              googlePay: 'buy',
+            },
+            buttonHeight: 44,
+          }}
+        />
+        {!expressCheckoutReady && (
+          <p className="text-xs text-biotech-gray/60 mt-2 text-center">
+            Loading express checkout options...
+          </p>
+        )}
+      </div>
+
+      {/* Divider */}
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-t border-biotech-white/10"></div>
+        </div>
+        <div className="relative flex justify-center text-sm">
+          <span className="px-2 bg-biotech-black text-biotech-gray">Or pay with card</span>
+        </div>
+      </div>
+
       {/* Payment Element */}
       <div className="bg-biotech-black/50 border border-biotech-white/20 rounded-xl p-4">
         <label className="block text-sm text-biotech-gray mb-2">
-          Payment Information
+          Card Information
         </label>
         <div className="p-3 bg-biotech-dark rounded-lg">
           <PaymentElement 
@@ -80,7 +171,7 @@ export function PaymentForm({ clientSecret: _clientSecret, onSuccess, onError }:
                 type: 'tabs',
                 defaultCollapsed: false,
               },
-              paymentMethodOrder: ['card', 'apple_pay', 'google_pay'],
+              paymentMethodOrder: ['card'],
             }}
           />
         </div>

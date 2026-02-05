@@ -430,6 +430,7 @@ export default function CheckoutPage({ onBack }: CheckoutPageProps) {
                       onError={(err) => {
                         setError(err);
                       }}
+                      totalAmount={total * 100} // Convert to cents for Stripe
                     />
                   </div>
                 </StripeProvider>
