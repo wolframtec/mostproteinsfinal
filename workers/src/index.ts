@@ -17,6 +17,7 @@ import { handleCORS } from './middleware/cors';
 import { rateLimit } from './middleware/rateLimit';
 import { errorHandler } from './middleware/errorHandler';
 import { requestLogger } from './middleware/requestLogger';
+import { socialCrawlerMiddleware } from './middleware/socialCrawler';
 
 // Import routes
 import healthRoutes from './routes/health';
@@ -54,6 +55,7 @@ export default {
       // Apply middleware
       router.use(requestLogger);
       router.use(rateLimit);
+      router.use(socialCrawlerMiddleware);
 
       // Register routes
       router.use('/api/health', healthRoutes);
