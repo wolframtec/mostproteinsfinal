@@ -14,7 +14,7 @@ import { CartPanel } from './components/CartPanel';
 
 gsap.registerPlugin(ScrollTrigger);
 
-import { ZoomThenLoopVideo } from './components/ZoomThenLoopVideo';
+import { IntroThenLoopVideo } from './components/IntroThenLoopVideo';
 // import { Scene3DWrapper } from './components/Scene3DWrapper'; // Uncomment to use 3D background
 
 // ============================================
@@ -221,11 +221,12 @@ function HomePageClient() {
 
   return (
     <div ref={mainRef} className="relative bg-biotech-black min-h-screen">
-      {/* Video Background - Zoom once, then loop close-up */}
-      <ZoomThenLoopVideo 
-        zoomSrc="/videos/zoom.mp4"
-        loopSrc="/videos/closeup.mp4"
+      {/* Video Background - Intro plays once, then seamless loop (remembered for 15 min) */}
+      <IntroThenLoopVideo 
+        introSrc="/videos/intro.mp4"
+        loopSrc="/videos/loop.mp4"
         overlayOpacity={0.6}
+        rememberDurationMinutes={15}
       />
 
       {/* Overlays */}
