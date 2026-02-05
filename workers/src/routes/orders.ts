@@ -19,9 +19,11 @@ router.post('/', async (request, env, ctx) => {
     const validation = validateOrder(data);
     if (!validation.valid) {
       return new Response(JSON.stringify({
-        error: 'Validation failed',
-        message: validation.message,
-        errors: validation.errors,
+        success: false,
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: validation.message || 'Invalid order data',
+        },
       }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' },
@@ -125,8 +127,11 @@ router.post('/', async (request, env, ctx) => {
   } catch (error) {
     logError('Failed to create order', error);
     return new Response(JSON.stringify({
-      error: 'Failed to create order',
-      message: error instanceof Error ? error.message : 'Unknown error',
+      success: false,
+      error: {
+        code: 'ORDER_ERROR',
+        message: error instanceof Error ? error.message : 'Failed to create order',
+      },
     }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },

@@ -21,9 +21,11 @@ router.post('/create-intent', async (request, env, ctx) => {
     const validation = validatePaymentIntent(data);
     if (!validation.valid) {
       return new Response(JSON.stringify({
-        error: 'Validation failed',
-        message: validation.message,
-        errors: validation.errors,
+        success: false,
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: validation.message || 'Invalid payment data',
+        },
       }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' },
@@ -40,7 +42,11 @@ router.post('/create-intent', async (request, env, ctx) => {
     // Check if Stripe is configured
     if (!env.STRIPE_SECRET_KEY) {
       return new Response(JSON.stringify({
-        error: 'Payment service not configured',
+        success: false,
+        error: {
+          code: 'STRIPE_NOT_CONFIGURED',
+          message: 'Payment service is not configured. Please contact support.',
+        },
       }), {
         status: 503,
         headers: { 'Content-Type': 'application/json' },
@@ -89,8 +95,11 @@ router.post('/create-intent', async (request, env, ctx) => {
   } catch (error) {
     logError('Failed to create payment intent', error);
     return new Response(JSON.stringify({
-      error: 'Payment creation failed',
-      message: error instanceof Error ? error.message : 'Unknown error',
+      success: false,
+      error: {
+        code: 'PAYMENT_ERROR',
+        message: error instanceof Error ? error.message : 'Failed to create payment intent',
+      },
     }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },

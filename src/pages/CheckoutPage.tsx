@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { 
   ArrowLeft, Lock, CreditCard, CheckCircle, AlertTriangle,
-  Shield, Truck, FileText, User, MapPin, Loader2
+  Shield, Truck, FileText, User, MapPin, Loader2, Wrench
 } from 'lucide-react';
 import { useCart } from '../context';
 import { StripeProvider } from '../components/StripeProvider';
@@ -20,6 +20,7 @@ export default function CheckoutPage({ onBack }: CheckoutPageProps) {
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isDemoMode, setIsDemoMode] = useState(false);
   
   // Form state
   const [formData, setFormData] = useState({
@@ -124,10 +125,17 @@ export default function CheckoutPage({ onBack }: CheckoutPageProps) {
       });
 
       if (!paymentResponse.success || !paymentResponse.data) {
+        // Check if it's a Stripe configuration error
+        if (paymentResponse.error?.code === 'STRIPE_NOT_CONFIGURED') {
+          setError('Payment service is temporarily unavailable. You can proceed in demo mode for testing.');
+          setIsDemoMode(true);
+          return;
+        }
         throw new Error(paymentResponse.error?.message || 'Failed to create payment intent');
       }
 
       setClientSecret(paymentResponse.data.clientSecret);
+      setIsDemoMode(false);
       setStep('payment');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unexpected error occurred');
@@ -234,11 +242,26 @@ export default function CheckoutPage({ onBack }: CheckoutPageProps) {
 
             {/* Error Message */}
             {error && (
-              <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4 flex items-start gap-3">
-                <AlertTriangle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-red-400 font-medium">Error</p>
-                  <p className="text-red-300/80 text-sm">{error}</p>
+              <div className={`border rounded-xl p-4 flex items-start gap-3 ${isDemoMode ? 'bg-yellow-500/10 border-yellow-500/30' : 'bg-red-500/10 border-red-500/30'}`}>
+                <AlertTriangle className={`w-5 h-5 flex-shrink-0 mt-0.5 ${isDemoMode ? 'text-yellow-400' : 'text-red-400'}`} />
+                <div className="flex-1">
+                  <p className={`font-medium ${isDemoMode ? 'text-yellow-400' : 'text-red-400'}`}>
+                    {isDemoMode ? 'Payment Service Unavailable' : 'Error'}
+                  </p>
+                  <p className={`text-sm ${isDemoMode ? 'text-yellow-300/80' : 'text-red-300/80'}`}>{error}</p>
+                  
+                  {isDemoMode && (
+                    <button
+                      onClick={() => {
+                        setStep('payment');
+                        setError(null);
+                      }}
+                      className="mt-3 px-4 py-2 bg-yellow-500/20 text-yellow-400 rounded-lg text-sm font-medium hover:bg-yellow-500/30 transition-colors flex items-center gap-2"
+                    >
+                      <Wrench className="w-4 h-4" />
+                      Continue in Demo Mode
+                    </button>
+                  )}
                 </div>
               </div>
             )}
@@ -432,7 +455,7 @@ export default function CheckoutPage({ onBack }: CheckoutPageProps) {
               </form>
             )}
 
-            {step === 'payment' && clientSecret && (
+            {step === 'payment' && clientSecret && !isDemoMode && (
               <div className="space-y-6">
                 <StripeProvider clientSecret={clientSecret}>
                   <div className="glass-card p-6">
@@ -457,6 +480,57 @@ export default function CheckoutPage({ onBack }: CheckoutPageProps) {
                     onClick={() => setStep('info')} 
                     disabled={isLoading}
                     className="flex-1 px-6 py-4 bg-biotech-white/10 border border-biotech-white/20 text-biotech-white font-semibold rounded-xl hover:bg-biotech-white/20 transition-colors disabled:opacity-50"
+                  >
+                    Back
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Demo Mode Payment */}
+            {step === 'payment' && isDemoMode && (
+              <div className="space-y-6">
+                <div className="glass-card p-6">
+                  <h3 className="text-lg font-heading font-bold text-biotech-white mb-4 flex items-center gap-2">
+                    <Wrench className="w-5 h-5 text-yellow-400" />
+                    Demo Mode
+                  </h3>
+                  
+                  <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-4 mb-6">
+                    <p className="text-yellow-400/80 text-sm">
+                      Payment processing is not configured. This is a demo checkout for testing purposes only. 
+                      No actual payment will be processed.
+                    </p>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-2 text-sm text-biotech-gray">
+                      <CheckCircle className="w-4 h-4 text-biotech-mint" />
+                      <span>Order will be marked as complete</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-biotech-gray">
+                      <CheckCircle className="w-4 h-4 text-biotech-mint" />
+                      <span>Cart will be cleared</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-biotech-gray">
+                      <CheckCircle className="w-4 h-4 text-biotech-mint" />
+                      <span>No actual charge will be made</span>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={handlePaymentSuccess}
+                    className="w-full mt-6 py-4 bg-yellow-500/20 text-yellow-400 font-semibold rounded-xl hover:bg-yellow-500/30 transition-colors flex items-center justify-center gap-2"
+                  >
+                    <Wrench className="w-5 h-5" />
+                    Complete Demo Order
+                  </button>
+                </div>
+
+                <div className="flex gap-4">
+                  <button 
+                    onClick={() => setStep('info')} 
+                    className="flex-1 px-6 py-4 bg-biotech-white/10 border border-biotech-white/20 text-biotech-white font-semibold rounded-xl hover:bg-biotech-white/20 transition-colors"
                   >
                     Back
                   </button>

@@ -38,7 +38,10 @@ export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     // Handle CORS preflight requests
     if (request.method === 'OPTIONS') {
-      return handleCORS(request, env);
+      const corsResponse = handleCORS(request, env);
+      if (corsResponse) {
+        return corsResponse;
+      }
     }
 
     const url = new URL(request.url);
