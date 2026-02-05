@@ -1,0 +1,31 @@
+{
+  "name": "mostproteins-api",
+  "version": "2.0.0",
+  "description": "Most Proteins API - Cloudflare Workers backend with D1 database",
+  "main": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:create": "wrangler d1 create mostproteins-db",
+    "db:migrate": "wrangler d1 execute mostproteins-db --file=./src/database/schema.sql",
+    "db:migrate:local": "wrangler d1 execute mostproteins-db --local --file=./src/database/schema.sql",
+    "logs": "wrangler tail"
+  },
+  "keywords": [
+    "cloudflare",
+    "workers",
+    "stripe",
+    "d1",
+    "api"
+  ],
+  "author": "Most Proteins",
+  "license": "PRIVATE",
+  "dependencies": {},
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20231218.0",
+    "@types/node": "^20.10.5",
+    "typescript": "^5.3.3",
+    "wrangler": "^3.22.1"
+  }
+}

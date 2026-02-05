@@ -1,0 +1,31 @@
+name = "mostproteins-api"
+main = "src/index.ts"
+compatibility_date = "2024-01-01"
+
+# D1 Database binding
+[[d1_databases]]
+binding = "DB"
+database_name = "mostproteins-db"
+# Replace with your actual database ID after creating it:
+# database_id = "your-database-id-here"
+
+# Environment variables (non-sensitive)
+[vars]
+NODE_ENV = "production"
+
+# Secrets (set via: wrangler secret put STRIPE_SECRET_KEY)
+# STRIPE_SECRET_KEY
+# STRIPE_WEBHOOK_SECRET
+
+# Rate limiting and performance
+[limits]
+cpu_ms = 30000  # 30s CPU time limit for payment processing
+
+# Enable Node.js compatibility for Stripe
+[build]
+command = "npm install"
+
+# Logging
+[observability]
+enabled = true
+head_sampling_rate = 1.0

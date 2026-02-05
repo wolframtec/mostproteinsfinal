@@ -1,0 +1,52 @@
+name = "mostproteins"
+compatibility_date = "2024-01-01"
+
+# Build configuration
+[build]
+command = "npm run build"
+output_dir = "dist"
+
+# Environment variables for production
+[env.production]
+vars = { 
+  VITE_API_URL = "https://mostproteins-api.YOUR_SUBDOMAIN.workers.dev",
+  VITE_STRIPE_PUBLIC_KEY = "pk_live_YOUR_STRIPE_PUBLIC_KEY"
+}
+
+# Environment variables for staging
+[env.staging]
+vars = { 
+  VITE_API_URL = "https://mostproteins-api-staging.YOUR_SUBDOMAIN.workers.dev",
+  VITE_STRIPE_PUBLIC_KEY = "pk_test_YOUR_STRIPE_TEST_KEY"
+}
+
+# Headers for security and caching
+[[headers]]
+for = "/*"
+[headers.values]
+X-Frame-Options = "DENY"
+X-Content-Type-Options = "nosniff"
+Referrer-Policy = "strict-origin-when-cross-origin"
+Permissions-Policy = "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
+
+# Cache static assets
+[[headers]]
+for = "/assets/*"
+[headers.values]
+Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+for = "/*.js"
+[headers.values]
+Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+for = "/*.css"
+[headers.values]
+Cache-Control = "public, max-age=31536000, immutable"
+
+# Don't cache HTML files
+[[headers]]
+for = "/*.html"
+[headers.values]
+Cache-Control = "public, max-age=0, must-revalidate"
