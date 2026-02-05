@@ -996,10 +996,10 @@ function AppContent() {
       <section ref={heroRef} className="section-pinned flex items-center justify-center z-10">
         <div className="text-center px-4">
           <h1 className="hero-content text-5xl md:text-7xl lg:text-8xl font-heading font-bold text-biotech-white text-glow mb-6">
-            Research-Grade Peptides
+            MOST PROTEINS
           </h1>
           <p className="hero-content text-lg md:text-xl text-biotech-gray max-w-2xl mx-auto mb-8">
-            High-purity research compounds for qualified laboratories and scientific institutions.
+            MOST: Measurable, Observable, Strictly Traceable — built for the most demanding labs.
           </p>
           <button
             onClick={() => document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' })}
