@@ -191,13 +191,9 @@ export function PaymentForm({ clientSecret: _clientSecret, onSuccess, onError, t
         {/* Payment Element - Card Input */}
         <div className="p-4 bg-biotech-dark rounded-lg border border-biotech-white/10">
           <PaymentElement 
+            key={clientSecret}
             options={{
-              layout: {
-                type: 'accordion',
-                defaultCollapsed: false,
-                radios: false,
-                spacedAccordionItems: true,
-              },
+              layout: 'tabs',
               paymentMethodOrder: ['card'],
             }}
           />
