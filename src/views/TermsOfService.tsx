@@ -1,18 +1,15 @@
+import Link from 'next/link';
 import { ArrowLeft, Beaker, AlertTriangle, Scale, FileText, Gavel } from 'lucide-react';
 
-interface TermsOfServiceProps {
-  onBack: () => void;
-}
-
-export default function TermsOfService({ onBack }: TermsOfServiceProps) {
+export default function TermsOfService() {
   return (
     <div className="min-h-screen bg-biotech-black">
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-center justify-between bg-biotech-black/90 backdrop-blur-xl border-b border-biotech-white/10">
-        <button onClick={onBack} className="flex items-center gap-2 text-biotech-gray hover:text-biotech-white transition-colors">
+        <Link href="/" className="flex items-center gap-2 text-biotech-gray hover:text-biotech-white transition-colors">
           <ArrowLeft className="w-5 h-5" />
           <span>Back</span>
-        </button>
+        </Link>
         <div className="flex items-center gap-2">
           <Beaker className="w-5 h-5 text-biotech-mint" />
           <span className="font-heading font-bold text-biotech-white">Most Proteins</span>

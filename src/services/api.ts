@@ -5,7 +5,7 @@
  * Provides typed methods for orders, payments, and webhooks.
  */
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
 
 // Request timeout in milliseconds
 const REQUEST_TIMEOUT = 30000;
@@ -45,6 +45,20 @@ interface CreateOrderRequest {
   termsAccepted: boolean;
   researchUseOnly: boolean;
   notes?: string;
+  pricing?: {
+    subtotal: number;
+    shipping: number;
+    tax: number;
+    total: number;
+  };
+  compliance?: {
+    ageVerified: boolean;
+    ageVerifiedAt?: string;
+    termsAccepted: boolean;
+    termsAcceptedAt?: string;
+    researchUseOnly: boolean;
+    researchUseAcknowledgedAt?: string;
+  };
 }
 
 interface OrderResponse {
@@ -162,9 +176,9 @@ export const orderApi = {
   /**
    * Get order details
    */
-  get: (orderId: string, email?: string): Promise<ApiResponse<any>> => {
+  get: (orderId: string, email?: string): Promise<ApiResponse<Record<string, unknown>>> => {
     const queryParams = email ? `?email=${encodeURIComponent(email)}` : '';
-    return apiRequest<any>(`/orders/${orderId}${queryParams}`, {
+    return apiRequest<Record<string, unknown>>(`/orders/${orderId}${queryParams}`, {
       method: 'GET',
     });
   },
@@ -176,8 +190,8 @@ export const orderApi = {
     orderId: string,
     status: string,
     paymentIntentId?: string
-  ): Promise<ApiResponse<any>> => {
-    return apiRequest<any>(`/orders/${orderId}/status`, {
+  ): Promise<ApiResponse<Record<string, unknown>>> => {
+    return apiRequest<Record<string, unknown>>(`/orders/${orderId}/status`, {
       method: 'PATCH',
       body: JSON.stringify({ status, paymentIntentId }),
     });
@@ -203,8 +217,8 @@ export const paymentApi = {
   /**
    * Get payment intent status
    */
-  getStatus: (paymentIntentId: string): Promise<ApiResponse<any>> => {
-    return apiRequest<any>(`/payments/${paymentIntentId}/status`, {
+  getStatus: (paymentIntentId: string): Promise<ApiResponse<Record<string, unknown>>> => {
+    return apiRequest<Record<string, unknown>>(`/payments/${paymentIntentId}/status`, {
       method: 'GET',
     });
   },
@@ -212,8 +226,8 @@ export const paymentApi = {
   /**
    * Confirm payment intent
    */
-  confirm: (paymentIntentId: string, paymentMethod?: string): Promise<ApiResponse<any>> => {
-    return apiRequest<any>(`/payments/${paymentIntentId}/confirm`, {
+  confirm: (paymentIntentId: string, paymentMethod?: string): Promise<ApiResponse<Record<string, unknown>>> => {
+    return apiRequest<Record<string, unknown>>(`/payments/${paymentIntentId}/confirm`, {
       method: 'POST',
       body: JSON.stringify({ paymentMethod }),
     });
@@ -236,8 +250,8 @@ export const healthApi = {
   /**
    * Get detailed health info
    */
-  detailed: (): Promise<ApiResponse<any>> => {
-    return apiRequest<any>('/health/detailed', {
+  detailed: (): Promise<ApiResponse<Record<string, unknown>>> => {
+    return apiRequest<Record<string, unknown>>('/health/detailed', {
       method: 'GET',
     });
   },

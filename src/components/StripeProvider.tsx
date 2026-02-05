@@ -1,9 +1,11 @@
+'use client';
+
 import { useState, useEffect, type ReactNode } from 'react';
 import { loadStripe, type Stripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 
 // Stripe public key - provided by client
-const STRIPE_PUBLIC_KEY = 'pk_live_51S4XlR0SClXAcjAhi1w6BkuRdEZaYBtsVLZXf9wg4LyriUJmWL9ztKzco7jUhmSbm35Sw9DXpuKTwnUd8iy8SUUj00bAEHhFna';
+const STRIPE_PUBLIC_KEY = process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY ?? '';
 
 interface StripeProviderProps {
   children: ReactNode;
@@ -17,8 +19,17 @@ export function StripeProvider({ children, clientSecret }: StripeProviderProps) 
 
   useEffect(() => {
     const initStripe = async () => {
+      if (!STRIPE_PUBLIC_KEY) {
+        setIsLoading(false);
+        return;
+      }
+
       try {
         const stripeInstance = await loadStripe(STRIPE_PUBLIC_KEY);
+        if (!stripeInstance) {
+          setError('Failed to initialize payment system. Please try again later.');
+          return;
+        }
         setStripe(stripeInstance);
       } catch (err) {
         setError('Failed to load payment system. Please try again later.');
@@ -67,7 +78,11 @@ export function StripeProvider({ children, clientSecret }: StripeProviderProps) 
       <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-6 text-center">
         <h3 className="text-lg font-heading font-bold text-biotech-white mb-2">Demo Mode</h3>
         <p className="text-biotech-gray mb-4">
-          Stripe is not configured. To enable payments, add your Stripe public key to the environment variables.
+          Stripe is not configured. To enable payments, set
+          {' '}
+          <span className="text-biotech-white font-mono">NEXT_PUBLIC_STRIPE_PUBLIC_KEY</span>
+          {' '}
+          in the environment.
         </p>
         <div className="bg-biotech-black/50 rounded-lg p-4 mb-4">
           <p className="text-sm text-yellow-400/80">

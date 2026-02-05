@@ -18,8 +18,8 @@ I've completely migrated your application to run on Cloudflare's edge infrastruc
 | Component | Technology | Purpose |
 |-----------|------------|---------|
 | **Hosting** | Cloudflare Pages | Static site hosting |
-| **Build** | Vite | Build tool |
-| **Framework** | React + TypeScript | UI framework |
+| **Build** | Next.js + `@cloudflare/next-on-pages` | SSR/SSG build output for Pages |
+| **Framework** | Next.js (React + TypeScript) | UI framework |
 
 ---
 
@@ -27,11 +27,13 @@ I've completely migrated your application to run on Cloudflare's edge infrastruc
 
 ```
 mostproteinsfinal/
-├── app/                          # Frontend (React + Vite)
-│   ├── src/
-│   ├── dist/                     # Build output
-│   ├── wrangler.toml             # Pages deployment config ⭐ NEW
-│   └── ...
+├── src/
+│   ├── app/                      # Next.js App Router routes/layouts
+│   └── ...                       # Shared components and client pages
+├── public/                       # Static assets
+├── next.config.mjs               # Next.js config
+├── next-env.d.ts                 # Next.js types
+├── wrangler.toml                 # Pages deployment config ⭐ NEW
 │
 ├── backend/                      # Old Node.js backend (kept for reference)
 │   └── ...
@@ -119,16 +121,14 @@ npx wrangler deploy
 #### Step 2: Frontend (Pages)
 
 ```bash
-cd app
-
 # Install dependencies
 npm install
 
-# Build
-npm run build
+# Build Next.js for Pages
+npx @cloudflare/next-on-pages@1
 
 # Deploy
-npx wrangler pages deploy dist --project-name=mostproteins
+npx wrangler pages deploy .vercel/output/static --project-name=mostproteins
 ```
 
 #### Step 3: Configure Stripe Webhook
@@ -176,12 +176,12 @@ Your new API is available at: `https://mostproteins-api.YOUR_SUBDOMAIN.workers.d
 | `ALLOWED_ORIGINS` | `*` | Comma-separated allowed CORS origins |
 | `NODE_ENV` | `production` | Environment mode |
 
-### Frontend Variables (in `app/wrangler.toml`)
+### Frontend Variables (in `wrangler.toml`)
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `VITE_API_URL` | ✅ Yes | Your Workers URL |
-| `VITE_STRIPE_PUBLIC_KEY` | ✅ Yes | Stripe publishable key (pk_live_...) |
+| `NEXT_PUBLIC_API_URL` | ✅ Yes | Your Workers API base URL |
+| `NEXT_PUBLIC_STRIPE_PUBLIC_KEY` | ✅ Yes | Stripe publishable key (pk_live_...) |
 
 ---
 

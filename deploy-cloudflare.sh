@@ -94,6 +94,8 @@ fi
 echo -e "${BLUE}🔗 Worker URL: $WORKER_URL${NC}"
 echo ""
 
+API_URL="${WORKER_URL}/api"
+
 cd ..
 
 # ============================================
@@ -102,16 +104,14 @@ cd ..
 echo -e "${BLUE}📦 Step 2: Deploying Frontend (Pages)${NC}"
 echo "-------------------------------------------"
 
-cd app
-
 # Update API URL in wrangler.toml
 echo -e "${BLUE}📝 Updating API configuration...${NC}"
 if [[ "$OSTYPE" == "darwin"* ]]; then
     # macOS
-    sed -i '' "s|VITE_API_URL = \"[^\"]*\"|VITE_API_URL = \"$WORKER_URL\"|" wrangler.toml
+    sed -i '' "s|NEXT_PUBLIC_API_URL = \"[^\"]*\"|NEXT_PUBLIC_API_URL = \"$API_URL\"|" wrangler.toml
 else
     # Linux
-    sed -i "s|VITE_API_URL = \"[^\"]*\"|VITE_API_URL = \"$WORKER_URL\"|" wrangler.toml
+    sed -i "s|NEXT_PUBLIC_API_URL = \"[^\"]*\"|NEXT_PUBLIC_API_URL = \"$API_URL\"|" wrangler.toml
 fi
 
 # Install dependencies if needed
@@ -122,16 +122,14 @@ fi
 
 # Build the app
 echo -e "${BLUE}🔨 Building frontend...${NC}"
-npm run build
+npx @cloudflare/next-on-pages@1
 
 # Deploy to Pages
 echo -e "${BLUE}🚀 Deploying to Cloudflare Pages...${NC}"
-wrangler pages deploy dist --project-name=mostproteins
+wrangler pages deploy .vercel/output/static --project-name=mostproteins
 
 echo -e "${GREEN}✅ Frontend deployed successfully!${NC}"
 echo ""
-
-cd ..
 
 # ============================================
 # POST-DEPLOYMENT

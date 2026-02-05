@@ -1,3 +1,5 @@
+'use client';
+
 import { useRef, useEffect } from 'react';
 import { ShoppingCart, ArrowRight } from 'lucide-react';
 import { useCart, type Product } from '../context';

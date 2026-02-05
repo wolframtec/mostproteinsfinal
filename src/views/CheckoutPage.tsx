@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import { 
   ArrowLeft, Lock, CreditCard, CheckCircle, AlertTriangle,
@@ -91,7 +93,7 @@ export default function CheckoutPage({ onBack }: CheckoutPageProps) {
           researchUseOnly: formData.researchPurpose,
           researchUseAcknowledgedAt: now,
         },
-      } as any);
+      });
 
       if (!orderResponse.success || !orderResponse.data) {
         throw new Error(orderResponse.error?.message || 'Failed to create order');

@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 import { AlertTriangle, CheckCircle, Loader2, ArrowLeft, RefreshCw } from 'lucide-react';
 import { useCart } from '../context';

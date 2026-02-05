@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useEffect } from 'react';
 import { Cookie, X, ChevronDown, ChevronUp, Shield } from 'lucide-react';
 

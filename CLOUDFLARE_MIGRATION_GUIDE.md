@@ -104,32 +104,28 @@ Deploying on Cloudflare requires **significant architectural changes** because t
 ## Phase 1: Frontend Migration (Cloudflare Pages)
 
 ### Step 1: Create wrangler.toml
-Create `app/wrangler.toml`:
+Create `wrangler.toml` in the repo root:
 
 ```toml
 name = "mostproteins"
 compatibility_date = "2024-01-01"
 
-[build]
-command = "npm run build"
-output_dir = "dist"
+pages_build_output_dir = ".vercel/output/static"
 
-[env.production]
-vars = { VITE_API_URL = "https://api.mostproteins.com" }
-
-[env.staging]
-vars = { VITE_API_URL = "https://api-staging.mostproteins.com" }
+[vars]
+NEXT_PUBLIC_API_URL = "https://api.mostproteins.com"
+NEXT_PUBLIC_STRIPE_PUBLIC_KEY = "pk_live_..."
 ```
 
 ### Step 2: Update Frontend API Client
 
-File: `app/src/services/api.ts`
+File: `src/services/api.ts`
 
 Update to handle Cloudflare Workers response format:
 
 ```typescript
 // Update base URL for production
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8787';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8787';
 
 // Add error handling for Workers-specific errors
 export const createOrder = async (orderData: OrderData) => {
@@ -158,15 +154,17 @@ export const createOrder = async (orderData: OrderData) => {
 ### Step 3: Deploy Frontend
 
 ```bash
-cd app
 # Install Wrangler CLI
 npm install -g wrangler
 
 # Login to Cloudflare
 wrangler login
 
+# Build Next.js for Cloudflare Pages
+npx @cloudflare/next-on-pages@1
+
 # Deploy
-wrangler pages deploy dist --project-name=mostproteins
+wrangler pages deploy .vercel/output/static --project-name=mostproteins
 ```
 
 ---
@@ -801,7 +799,7 @@ If issues arise:
 ## Summary of Changes Required
 
 ### Files to Create:
-- `app/wrangler.toml` - Frontend deployment config
+- `wrangler.toml` - Frontend deployment config (Pages)
 - `workers/` - Entire new backend directory
 - `workers/wrangler.toml` - Worker config
 - `workers/src/database/schema.sql` - D1 schema
@@ -809,8 +807,8 @@ If issues arise:
 - `workers/src/routes/*.ts` - API routes
 
 ### Files to Modify:
-- `app/src/services/api.ts` - Update API base URL
-- `app/.env` - Add production API URL
+- `src/services/api.ts` - Update API base URL
+- `.env.production` - Add `NEXT_PUBLIC_API_URL` and `NEXT_PUBLIC_STRIPE_PUBLIC_KEY`
 - `backend/` - Keep as backup/fallback
 
 ### Estimated Timeline:
@@ -847,10 +845,10 @@ Use this as your working checklist:
 - [ ] Test health endpoint
 
 ### Phase 3: Frontend (Pages)
-- [ ] Create app/wrangler.toml
+- [ ] Create wrangler.toml (repo root)
 - [ ] Update API base URL in services/api.ts
-- [ ] Build: `npm run build`
-- [ ] Deploy: `wrangler pages deploy dist`
+- [ ] Build: `npx @cloudflare/next-on-pages@1`
+- [ ] Deploy: `wrangler pages deploy .vercel/output/static`
 - [ ] Verify frontend loads
 
 ### Phase 4: Integration
