@@ -3,6 +3,7 @@
 import { useRef, useEffect } from 'react';
 import { ShoppingCart, ArrowRight } from 'lucide-react';
 import { useCart, type Product } from '../context';
+import { renderProductIcon } from '../lib/product-icons';
 
 interface ProductCardProps {
   product: Product;
@@ -136,7 +137,7 @@ export const ProductCard = ({ product, isVisible, onViewDetails }: ProductCardPr
         
         {/* Label badge */}
         <div className="absolute top-2 sm:top-3 left-2 sm:left-3 flex items-center gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/10">
-          <span className="text-[#2EE9A8]">{product.icon}</span>
+          <span className="text-[#2EE9A8]">{renderProductIcon(product.iconKey, 'w-5 h-5')}</span>
           <span className="text-[9px] sm:text-[10px] font-mono font-medium text-white/90 tracking-widest uppercase">
             {product.label}
           </span>

@@ -1,4 +1,3 @@
-import { Activity, Dna, Shield, Sparkles, Zap } from 'lucide-react';
 import { type Product } from '../context';
 
 export const PRODUCTS: Product[] = [
@@ -9,7 +8,7 @@ export const PRODUCTS: Product[] = [
     price: 178,
     image: '/images/bpc157-product.jpg',
     label: 'RESEARCH PEPTIDE',
-    icon: <Activity className="w-5 h-5" />,
+    iconKey: 'activity',
     casNumber: '137525-51-0',
     molecularWeight: '1419.5 g/mol',
     purity: '≥98%',
@@ -23,7 +22,7 @@ export const PRODUCTS: Product[] = [
     price: 258,
     image: '/images/ghkcu-product.jpg',
     label: 'RESEARCH PEPTIDE',
-    icon: <Sparkles className="w-5 h-5" />,
+    iconKey: 'sparkles',
     casNumber: '89030-95-5',
     molecularWeight: '340.4 g/mol',
     purity: '≥99%',
@@ -37,7 +36,7 @@ export const PRODUCTS: Product[] = [
     price: 298,
     image: '/images/epithalon-product.jpg',
     label: 'RESEARCH PEPTIDE',
-    icon: <Dna className="w-5 h-5" />,
+    iconKey: 'dna',
     casNumber: '307297-39-8',
     molecularWeight: '390.3 g/mol',
     purity: '≥98%',
@@ -51,7 +50,7 @@ export const PRODUCTS: Product[] = [
     price: 218,
     image: '/images/tb500-product.jpg',
     label: 'RESEARCH PEPTIDE',
-    icon: <Shield className="w-5 h-5" />,
+    iconKey: 'shield',
     casNumber: '885340-08-9',
     molecularWeight: '889.0 g/mol',
     purity: '≥98%',
@@ -65,7 +64,7 @@ export const PRODUCTS: Product[] = [
     price: 358,
     image: '/images/cjc-product.jpg',
     label: 'RESEARCH BLEND',
-    icon: <Zap className="w-5 h-5" />,
+    iconKey: 'zap',
     casNumber: 'Blend - See COA',
     molecularWeight: 'Varies',
     purity: '≥98%',

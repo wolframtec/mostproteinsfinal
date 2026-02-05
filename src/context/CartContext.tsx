@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useCallback, useMemo, type ReactNode } from 'react';
+import type { ProductIconKey } from '../lib/product-icons';
 
 // ============================================
 // TYPES
@@ -10,7 +11,7 @@ export interface Product {
   price: number;
   image: string;
   label: string;
-  icon: React.ReactNode;
+  iconKey: ProductIconKey;
   casNumber?: string;
   molecularWeight?: string;
   purity?: string;

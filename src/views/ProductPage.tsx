@@ -7,6 +7,7 @@ import {
   X
 } from 'lucide-react';
 import { useCart, type Product } from '../context';
+import { renderProductIcon } from '../lib/product-icons';
 
 interface ProductPageProps {
   product: Product;
@@ -149,7 +150,7 @@ export default function ProductPage({ product, onBack, onCartClick }: ProductPag
             {/* Header */}
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <span className="text-biotech-mint">{product.icon}</span>
+                <span className="text-biotech-mint">{renderProductIcon(product.iconKey, 'w-5 h-5')}</span>
                 <span className="label-mono text-biotech-mint text-xs">{product.label}</span>
               </div>
               <h1 className="text-3xl md:text-4xl font-heading font-bold text-biotech-white mb-4">
