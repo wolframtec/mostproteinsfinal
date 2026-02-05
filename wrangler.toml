@@ -5,10 +5,6 @@ compatibility_date = "2024-01-01"
 # Build command: npm install && npm run build
 pages_build_output_dir = "dist"
 
-# Environment variables for build (these are baked into the build)
-[env.production.vars]
+# Build environment variables (available during npm run build)
+[vars]
 VITE_API_URL = "https://mostproteinsfinal.justbreatheaire.workers.dev/api"
-
-# For local development
-[env.development.vars]
-VITE_API_URL = "http://localhost:3001/api"
