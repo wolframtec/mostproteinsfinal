@@ -52,6 +52,9 @@ export default function CheckoutPage({ onBack }: CheckoutPageProps) {
     setError(null);
 
     try {
+      const now = new Date().toISOString();
+      const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      
       // Create order on backend
       const orderResponse = await orderApi.create({
         items: items.map(item => ({
@@ -73,7 +76,21 @@ export default function CheckoutPage({ onBack }: CheckoutPageProps) {
         termsAccepted: formData.termsAgree,
         researchUseOnly: formData.researchPurpose,
         notes: `Institution: ${formData.institution}`,
-      });
+        pricing: {
+          subtotal: subtotal * 100,
+          shipping: 0,
+          tax: 0,
+          total: subtotal * 100,
+        },
+        compliance: {
+          ageVerified: formData.ageConfirm,
+          ageVerifiedAt: now,
+          termsAccepted: formData.termsAgree,
+          termsAcceptedAt: now,
+          researchUseOnly: formData.researchPurpose,
+          researchUseAcknowledgedAt: now,
+        },
+      } as any);
 
       if (!orderResponse.success || !orderResponse.data) {
         throw new Error(orderResponse.error?.message || 'Failed to create order');
