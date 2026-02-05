@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { 
   PaymentElement, 
   useStripe, 
@@ -24,19 +24,19 @@ export function PaymentForm({ clientSecret: _clientSecret, onSuccess, onError, t
 
   // Handle Express Checkout (Apple Pay / Google Pay)
   const handleExpressCheckout = async (event: any) => {
-    if (!stripe) return;
+    if (!stripe || !elements) return;
 
     setIsProcessing(true);
     setPaymentError(null);
     setPaymentStatus('processing');
 
     try {
-      const { error, paymentIntent } = await stripe.confirmPayment({
+      const { error } = await stripe.confirmPayment({
         elements,
         confirmParams: {
           return_url: `${window.location.origin}/checkout/complete`,
         },
-        redirect: 'if_required',
+        redirect: 'if_required' as const,
       });
 
       if (error) {
@@ -44,12 +44,10 @@ export function PaymentForm({ clientSecret: _clientSecret, onSuccess, onError, t
         onError(error.message || 'Payment failed');
         setPaymentStatus('idle');
         event.complete('fail');
-      } else if (paymentIntent?.status === 'succeeded') {
+      } else {
         setPaymentStatus('succeeded');
         event.complete('success');
         onSuccess();
-      } else {
-        event.complete('success');
       }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Payment processing failed';
