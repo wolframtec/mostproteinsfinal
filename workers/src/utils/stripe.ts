@@ -110,16 +110,25 @@ export async function stripeAPI(
   
   if (body && method !== 'GET') {
     // Convert body to URL-encoded format
+    // Stripe expects nested objects as: parent[key]=value
     const params = new URLSearchParams();
-    for (const [key, value] of Object.entries(body)) {
-      if (value !== undefined && value !== null) {
-        if (typeof value === 'object') {
-          params.append(key, JSON.stringify(value));
+    
+    function flattenObject(obj: Record<string, unknown>, prefix = ''): void {
+      for (const [key, value] of Object.entries(obj)) {
+        const fullKey = prefix ? `${prefix}[${key}]` : key;
+        
+        if (value === undefined || value === null) {
+          continue;
+        } else if (typeof value === 'object' && !Array.isArray(value)) {
+          // Recursively flatten nested objects
+          flattenObject(value as Record<string, unknown>, fullKey);
         } else {
-          params.append(key, String(value));
+          params.append(fullKey, String(value));
         }
       }
     }
+    
+    flattenObject(body);
     options.body = params.toString();
   }
   
@@ -145,23 +154,27 @@ export async function createPaymentIntent(
   amount: number;
   currency: string;
 }> {
-  const response = await stripeAPI('/payment_intents', 'POST', {
+  // Build request body with nested objects
+  const requestBody: Record<string, unknown> = {
     amount: params.amount,
     currency: params.currency.toLowerCase(),
-    'metadata[order_id]': params.orderId,
-    'receipt_email': params.customerEmail,
-    automatic_payment_methods: JSON.stringify({ 
+    metadata: {
+      order_id: params.orderId,
+      ...(params.metadata || {})
+    },
+    receipt_email: params.customerEmail,
+    automatic_payment_methods: { 
       enabled: true,
       allow_redirects: 'never'
-    }),
-    // Enable Apple Pay and other wallet payment methods
-    payment_method_options: JSON.stringify({
+    },
+    payment_method_options: {
       card: {
         request_three_d_secure: 'automatic'
       }
-    }),
-    ...params.metadata,
-  }, stripeKey);
+    },
+  };
+  
+  const response = await stripeAPI('/payment_intents', 'POST', requestBody, stripeKey);
   
   if (!response.ok) {
     const error = await response.json() as { error?: { message?: string } };
