@@ -1,0 +1,164 @@
+{
+  "categories": {
+    "nature": {
+      "name": "Nature & Landscapes",
+      "prompts": [
+        {
+          "name": "Flowing Water",
+          "description": "Rivers, streams, waterfalls",
+          "prompt": "Continue the seamless water flowing motion from the final frame. Maintain the exact lighting, ripple patterns, and color temperature. The water should flow naturally downstream, keeping the rocks and vegetation consistent. Avoid any sudden changes in water level or clarity.",
+          "tips": ["Best with overhead or side angles", "Avoid shots with lots of sky", "Consistent lighting is key"]
+        },
+        {
+          "name": "Ocean Waves",
+          "description": "Beach, surf, tide",
+          "prompt": "Extend the ocean wave motion seamlessly from the final frame. Maintain the same wave rhythm, foam patterns, and sunlight reflections. The tide should ebb and flow naturally without abrupt changes.",
+          "tips": ["Lock camera position", "Avoid shots with people", "Golden hour lighting works best"]
+        },
+        {
+          "name": "Clouds Moving",
+          "description": "Time-lapse style cloud motion",
+          "prompt": "Continue the cloud drift motion from the final frame. Maintain the same cloud formation style, lighting direction, and sky gradient. The clouds should move naturally across the frame.",
+          "tips": ["Static camera only", "Avoid fast-moving storm clouds", "Horizon line must be level"]
+        },
+        {
+          "name": "Fire / Campfire",
+          "description": "Flames and embers",
+          "prompt": "Extend the fire motion seamlessly from the final frame. Maintain the same flame intensity, ember patterns, and lighting flicker. The fire should burn naturally with realistic flame dynamics.",
+          "tips": ["Close-ups work better than wide shots", "Avoid smoke that obscures flames", "Consistent fuel source visible"]
+        },
+        {
+          "name": "Smoke Rising",
+          "description": "Atmospheric smoke effects",
+          "prompt": "Continue the smoke rising motion from the final frame. Maintain the same atmospheric lighting, smoke density, and particle behavior. The smoke should rise and dissipate naturally.",
+          "tips": ["Dark background helps", "Avoid wind interference", "Smooth, laminar flow works best"]
+        }
+      ]
+    },
+    "abstract": {
+      "name": "Abstract & Motion Graphics",
+      "prompts": [
+        {
+          "name": "Morphing Shapes",
+          "description": "Geometric transformations",
+          "prompt": "Continue the morphing geometric pattern seamlessly from the final frame. Maintain the same color palette, glow intensity, and transformation rhythm. The shapes should evolve fluidly without abrupt jumps.",
+          "tips": ["Start with simple shapes", "Limited color palette (2-3 colors)", "Avoid text or logos"]
+        },
+        {
+          "name": "Particle Flow",
+          "description": "Particles, dust, sparkles",
+          "prompt": "Extend the particle flow motion from the final frame. Maintain the same particle density, movement pattern, and lighting effects. Particles should flow naturally following the established trajectories.",
+          "tips": ["Dark backgrounds show particles best", "Consistent gravity/direction", "Avoid collision-heavy scenes"]
+        },
+        {
+          "name": "Liquid Metal",
+          "description": "Mercury-like fluid motion",
+          "prompt": "Continue the liquid metal flow from the final frame. Maintain the same reflective properties, surface texture, and fluid dynamics. The metal should move with realistic viscosity and reflections.",
+          "tips": ["Strong lighting for reflections", "Smooth surfaces work better", "Avoid complex splashing"]
+        },
+        {
+          "name": "Neon Trails",
+          "description": "Light painting, laser effects",
+          "prompt": "Extend the neon light trails from the final frame. Maintain the same color intensity, trail persistence, and motion paths. The light should flow continuously creating seamless patterns.",
+          "tips": ["Dark background essential", "Consistent motion speed", "Avoid trail collisions"]
+        }
+      ]
+    },
+    "organic": {
+      "name": "Organic & Living",
+      "prompts": [
+        {
+          "name": "Growing Plants",
+          "description": "Time-lapse growth",
+          "prompt": "Continue the plant growth motion from the final frame. Maintain the same lighting conditions, growth rate, and plant structure. New growth should emerge naturally from existing stems.",
+          "tips": ["Macro shots work best", "Static lighting required", "Avoid shots with moving shadows"]
+        },
+        {
+          "name": "Pulsing Organics",
+          "description": "Breathing, heartbeat motion",
+          "prompt": "Continue the organic pulsing rhythm from the final frame. Maintain the same contraction/expansion pattern, surface texture, and lighting. The motion should loop seamlessly with consistent timing.",
+          "tips": ["Regular rhythm is crucial", "Symmetrical subjects work best", "Avoid camera movement"]
+        },
+        {
+          "name": "Swirling Fluids",
+          "description": "Ink in water, colorful mixing",
+          "prompt": "Extend the fluid swirling motion from the final frame. Maintain the same color mixing patterns, flow dynamics, and diffusion rate. The fluids should blend naturally without breaking the pattern.",
+          "tips": ["Top-down or side view", "Limited color palette", "Avoid turbulence that breaks coherence"]
+        }
+      ]
+    },
+    "urban": {
+      "name": "Urban & Mechanical",
+      "prompts": [
+        {
+          "name": "Traffic Flow",
+          "description": "Cars, trains, movement",
+          "prompt": "Continue the traffic flow from the final frame. Maintain the same vehicle density, movement speed, and urban lighting. Vehicles should move naturally following traffic patterns.",
+          "tips": ["Long exposure style works well", "Consistent direction of flow", "Avoid intersections with stops"]
+        },
+        {
+          "name": "Escalator / Conveyor",
+          "description": "Mechanical movement",
+          "prompt": "Extend the mechanical conveyor motion from the final frame. Maintain the same movement speed, lighting conditions, and structural elements. The motion should be perfectly continuous.",
+          "tips": ["Side angle shows motion best", "Consistent speed essential", "Avoid people (hard to loop)"]
+        },
+        {
+          "name": "Spinning Objects",
+          "description": "Wheels, fans, rotations",
+          "prompt": "Continue the rotational motion from the final frame. Maintain the same rotation speed, lighting, and object appearance. The spin should be perfectly smooth and continuous.",
+          "tips": ["Radial symmetry helps", "Avoid identifying marks/logos", "Consistent rotation axis"]
+        }
+      ]
+    },
+    "character": {
+      "name": "Character Animation",
+      "prompts": [
+        {
+          "name": "Walk Cycle",
+          "description": "Character walking/running",
+          "prompt": "Continue the walking cycle seamlessly from the final frame. Maintain the same character pose, stride length, and background perspective. The walk should loop naturally for an infinite cycle.",
+          "tips": ["Side view is easiest to loop", "Consistent background (treadmill effect)", "Avoid foot plants that don't match"]
+        },
+        {
+          "name": "Idle Animation",
+          "description": "Breathing, waiting",
+          "prompt": "Extend the idle breathing motion from the final frame. Maintain the same character position, breathing rhythm, and subtle movements. The animation should loop seamlessly.",
+          "tips": ["Minimal position change", "Regular breathing pattern", "Static background"]
+        }
+      ]
+    }
+  },
+  "modifiers": {
+    "quality": [
+      "high quality",
+      "cinematic",
+      "smooth motion",
+      "professional footage"
+    ],
+    "lighting": [
+      "golden hour lighting",
+      "soft diffused light",
+      "dramatic side lighting",
+      "even studio lighting"
+    ],
+    "camera": [
+      "static camera",
+      "locked off tripod",
+      "no camera movement",
+      "consistent perspective"
+    ],
+    "continuity": [
+      "seamless transition",
+      "perfect loop",
+      "no jumps or cuts",
+      "continuous motion"
+    ]
+  },
+  "troubleshooting": {
+    "flickering": "Add: 'Maintain consistent exposure and brightness. Avoid any flickering or pulsing in lighting.'",
+    "color_shift": "Add: 'Lock the color temperature and white balance. Do not shift hues or saturation.'",
+    "subject_drift": "Add: 'Keep the main subject centered. Maintain consistent scale and position.'",
+    "background_change": "Add: 'Keep background elements static and unchanged. No new objects entering frame.'",
+    "motion_jerk": "Add: 'Maintain smooth, continuous motion. Avoid acceleration or deceleration changes.'"
+  }
+}

@@ -1,0 +1,4 @@
+Extension 2: https://d1q70pf5vjeyhc.cloudfront.net/predictions/0163e0f0e6c040e9b54d4eb1417f89d5/0.mp4
+Prompt: Extend the realistic flesh sequence. The tissue moves with living fluidity, veins and cellular structures visible. The motion continues naturally as if the transformation never ends.
+Seed: 43
+
