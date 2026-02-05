@@ -199,14 +199,6 @@ export function PaymentForm({ clientSecret: _clientSecret, onSuccess, onError, t
                 spacedAccordionItems: true,
               },
               paymentMethodOrder: ['card'],
-              fields: {
-                billingDetails: {
-                  name: 'never',
-                  email: 'never',
-                  phone: 'never',
-                  address: 'never',
-                },
-              },
             }}
           />
         </div>
