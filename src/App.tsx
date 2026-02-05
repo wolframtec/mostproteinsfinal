@@ -14,7 +14,8 @@ import { CartPanel } from './components/CartPanel';
 
 gsap.registerPlugin(ScrollTrigger);
 
-import { Scene3DWrapper } from './components/Scene3DWrapper';
+import { VideoBackground } from './components/VideoBackground';
+// import { Scene3DWrapper } from './components/Scene3DWrapper'; // Uncomment to use 3D background
 
 // ============================================
 // LOADING SCREEN
@@ -132,6 +133,10 @@ function HomePageClient() {
   const [activeProductIndex, setActiveProductIndex] = useState(-1);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const router = useRouter();
+  
+  // Prevent unused variable warning when 3D scene is disabled
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _scrollProgress = scrollProgress;
 
   const { count } = useCart();
 
@@ -139,7 +144,7 @@ function HomePageClient() {
   const heroRef = useRef<HTMLDivElement>(null);
   const productRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  // Scroll progress tracking
+  // Scroll progress tracking (for 3D scene - currently unused with video background)
   useEffect(() => {
     if (isLoading) return;
     const handleScroll = () => {
@@ -216,14 +221,20 @@ function HomePageClient() {
 
   return (
     <div ref={mainRef} className="relative bg-biotech-black min-h-screen">
+      {/* Video Background */}
+      <VideoBackground 
+        videoSrc="/videos/background.mp4"
+        overlayOpacity={0.6}
+      />
+
       {/* Overlays */}
       <div className="grain-overlay" />
       <div className="vignette" />
 
-      {/* 3D Canvas - Loaded dynamically on client only */}
-      <div className="canvas-container">
+      {/* 3D Canvas - Loaded dynamically on client only (optional, comment out if using video only) */}
+      {/* <div className="canvas-container">
         <Scene3DWrapper scrollProgress={scrollProgress} />
-      </div>
+      </div> */}
 
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-center justify-between bg-gradient-to-b from-biotech-black/80 to-transparent">
