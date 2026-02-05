@@ -23,6 +23,7 @@ router.get('/', async (request, env, ctx) => {
   
   // Check Stripe configuration
   const stripeConfigured = !!env.STRIPE_SECRET_KEY;
+  const webhookConfigured = !!env.STRIPE_WEBHOOK_SECRET;
   
   const health = {
     status: dbStatus === 'ok' ? 'ok' : 'degraded',
@@ -32,6 +33,7 @@ router.get('/', async (request, env, ctx) => {
     checks: {
       database: dbStatus,
       stripe: stripeConfigured ? 'configured' : 'not_configured',
+      webhooks: webhookConfigured ? 'configured' : 'not_configured',
     },
   };
   
