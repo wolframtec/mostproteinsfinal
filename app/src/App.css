@@ -1,0 +1,163 @@
+/* App-specific styles */
+
+/* Ensure smooth transitions for all interactive elements */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Canvas container fixes */
+.canvas-container canvas {
+  display: block;
+}
+
+/* Product card animations */
+.product-card-enter {
+  opacity: 0;
+  transform: translateX(-50vw);
+}
+
+.product-card-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.product-card-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.product-card-exit-active {
+  opacity: 0;
+  transform: translateX(-18vw);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Glass card enhancements */
+.glass-card {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+/* Button hover effects */
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.btn-primary:hover::before {
+  left: 100%;
+}
+
+/* Navigation blur effect */
+nav {
+  background: linear-gradient(
+    to bottom,
+    rgba(11, 12, 16, 0.8) 0%,
+    rgba(11, 12, 16, 0) 100%
+  );
+}
+
+/* Scroll section spacing */
+.section-pinned {
+  will-change: transform;
+}
+
+/* Image hover effect */
+.product-image-container {
+  overflow: hidden;
+}
+
+.product-image-container img {
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.product-image-container:hover img {
+  transform: scale(1.05);
+}
+
+/* Cart item animations */
+.cart-item-enter {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.cart-item-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 0.3s ease;
+}
+
+/* Loading animation */
+@keyframes dna-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+.loading-dna {
+  animation: dna-pulse 1.5s ease-in-out infinite;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .section-pinned {
+    min-height: 100vh;
+    height: auto;
+  }
+  
+  .glass-card {
+    width: 90vw !important;
+    max-width: none !important;
+  }
+  
+  .product-image {
+    width: 60vw !important;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus states for accessibility */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 2px solid #2EE9A8;
+  outline-offset: 2px;
+}
+
+/* Selection color */
+::selection {
+  background: rgba(46, 233, 168, 0.3);
+  color: #F4F6FA;
+}

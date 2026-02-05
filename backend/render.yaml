@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: mostproteins-api
+    runtime: node
+    buildCommand: npm install
+    startCommand: node src/server.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: ALLOWED_ORIGINS
+        value: https://mostproteins.com,https://*.ok.kimi.link
+    disk:
+      name: data
+      mountPath: /app/data
+      sizeGB: 1
