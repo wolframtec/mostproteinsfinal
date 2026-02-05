@@ -1,6 +1,9 @@
 # Cloudflare Pages Redirects
 # https://developers.cloudflare.com/pages/configuration/redirects/
 
+# Sitemap at root
+/sitemap /sitemap.xml 301
+
 # Redirect non-trailing slash to trailing slash for SEO
 /product/:slug /product/:slug/ 301
 /about /about/ 301
