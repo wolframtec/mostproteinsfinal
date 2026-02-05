@@ -20,6 +20,33 @@ Generate AI videos using Google's Veo 3.1 model through the NanoGPT API.
 
 ## Usage
 
+### Extend Your Existing Video (Recommended for Your Use Case)
+
+If you already have a video and want to extend it for seamless looping:
+
+```bash
+# Basic extension
+npm run video:extend -- public/videos/closeup.mp4
+
+# With custom prompt and auto-split
+npm run video:extend -- public/videos/closeup.mp4 --prompt "DNA helix continuation" --split
+
+# Full options
+npm run video:extend -- public/videos/background.mp4 \
+  --prompt "Seamless DNA animation continuation" \
+  --duration 8 \
+  --split \
+  --zoom-duration 5
+```
+
+This will:
+1. Upload your existing video to NanoGPT
+2. Generate an extension using Veo 3.1
+3. Download the extended version
+4. Optionally split into zoom.mp4 + closeup.mp4
+
+### Generate New Video
+
 ### Basic Generation
 
 ```bash

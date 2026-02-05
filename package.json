@@ -10,7 +10,8 @@
     "lint": "next lint",
     "deploy": "wrangler pages deploy dist",
     "video:generate": "node scripts/generate-video-loop.js",
-    "video:loop": "./scripts/create-seamless-loop.sh"
+    "video:loop": "./scripts/create-seamless-loop.sh",
+    "video:extend": "node scripts/extend-existing-video.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
