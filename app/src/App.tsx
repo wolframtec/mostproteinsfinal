@@ -33,6 +33,20 @@ const CheckoutPage = lazy(() => import('./pages/CheckoutPage'));
 // ============================================
 const PRODUCTS: Product[] = [
   {
+    id: 'test-item',
+    name: 'TEST ITEM - $1',
+    description: 'Test product for checkout verification. Research compound placeholder for testing payment flow.',
+    price: 1,
+    image: '/images/bpc157-product.jpg',
+    label: 'TEST PRODUCT',
+    icon: <Beaker className="w-5 h-5" />,
+    casNumber: 'N/A',
+    molecularWeight: 'N/A',
+    purity: 'N/A',
+    storage: 'N/A',
+    sequence: 'TEST',
+  },
+  {
     id: 'bpc-157',
     name: 'BPC-157 (5mg)',
     description: 'Synthetic pentadecapeptide consisting of 15 amino acids. Research compound for laboratory studies on tissue repair mechanisms. Purity: ≥98% by HPLC.',
