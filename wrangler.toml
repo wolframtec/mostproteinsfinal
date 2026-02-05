@@ -1,5 +1,6 @@
 name = "mostproteinsfinal"
 compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]
 
 # Cloudflare Pages build configuration
 # Build command: npx @cloudflare/next-on-pages@1
@@ -8,4 +9,4 @@ pages_build_output_dir = ".vercel/output/static"
 # Build environment variables (available during npm run build)
 [vars]
 NEXT_PUBLIC_API_URL = "https://mostproteinsfinal.justbreatheaire.workers.dev/api"
-NEXT_PUBLIC_STRIPE_PUBLIC_KEY = ""
+NEXT_PUBLIC_STRIPE_PUBLIC_KEY = "pk_live_51S4XlR0SClXAcjAhi1w6BkuRdEZaYBtsVLZXf9wg4LyriUJmWL9ztKzco7jUhmSbm35Sw9DXpuKTwnUd8iy8SUUj00bAEHhFna"
