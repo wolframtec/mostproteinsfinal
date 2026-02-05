@@ -41,6 +41,7 @@ router.post('/create-intent', async (request, env, ctx) => {
     
     // Check if Stripe is configured
     if (!env.STRIPE_SECRET_KEY) {
+      console.log('Stripe secret key not found in environment');
       return new Response(JSON.stringify({
         success: false,
         error: {
@@ -52,6 +53,9 @@ router.post('/create-intent', async (request, env, ctx) => {
         headers: { 'Content-Type': 'application/json' },
       });
     }
+    
+    // Log key prefix for debugging (only first 7 chars)
+    console.log('Using Stripe key starting with:', env.STRIPE_SECRET_KEY.substring(0, 7) + '...');
     
     // Create payment intent with Stripe
     const paymentIntent = await createPaymentIntent({

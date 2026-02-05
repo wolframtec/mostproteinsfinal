@@ -65,4 +65,62 @@ router.get('/detailed', async (request, env, ctx) => {
   });
 });
 
+// Test Stripe connection
+router.get('/stripe-test', async (request, env, ctx) => {
+  if (!env.STRIPE_SECRET_KEY) {
+    return new Response(JSON.stringify({
+      success: false,
+      error: 'STRIPE_SECRET_KEY not configured',
+    }), {
+      status: 503,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+  
+  try {
+    // Try to fetch account info from Stripe
+    const response = await fetch('https://api.stripe.com/v1/account', {
+      headers: {
+        'Authorization': `Bearer ${env.STRIPE_SECRET_KEY}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
+    
+    if (!response.ok) {
+      const error = await response.json() as { error?: { message?: string } };
+      return new Response(JSON.stringify({
+        success: false,
+        error: error.error?.message || 'Failed to connect to Stripe',
+        status: response.status,
+      }), {
+        status: 503,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+    
+    const account = await response.json() as { id: string; charges_enabled: boolean; payouts_enabled: boolean };
+    
+    return new Response(JSON.stringify({
+      success: true,
+      message: 'Stripe connection successful',
+      account: {
+        id: account.id,
+        chargesEnabled: account.charges_enabled,
+        payoutsEnabled: account.payouts_enabled,
+      },
+    }), {
+      headers: { 'Content-Type': 'application/json' },
+    });
+    
+  } catch (error) {
+    return new Response(JSON.stringify({
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+});
+
 export default router;
