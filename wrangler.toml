@@ -1,19 +1,6 @@
 name = "mostproteinsfinal"
 compatibility_date = "2024-01-01"
 
-# Root directory for build
+# Cloudflare Pages build configuration
+# Build command must be set in dashboard: cd app && npm install && npm run build
 pages_build_output_dir = "app/dist"
-
-# Build configuration
-[build]
-command = "cd app && npm install && npm run build"
-
-# Environment variables for production
-[env.production.vars]
-VITE_API_URL = "https://mostproteins-api.justbreatheaire.workers.dev"
-VITE_STRIPE_PUBLIC_KEY = "pk_live_51S4XlR0SClXAcjAhi1w6BkuRdEZaYBtsVLZXf9wg4LyriUJmWL9ztKzco7jUhmSbm35Sw9DXpuKTwnUd8iy8SUUj00bAEHhFna"
-
-# Environment variables for preview (staging)
-[env.preview.vars]
-VITE_API_URL = "https://mostproteins-api.justbreatheaire.workers.dev"
-VITE_STRIPE_PUBLIC_KEY = "pk_live_51S4XlR0SClXAcjAhi1w6BkuRdEZaYBtsVLZXf9wg4LyriUJmWL9ztKzco7jUhmSbm35Sw9DXpuKTwnUd8iy8SUUj00bAEHhFna"
