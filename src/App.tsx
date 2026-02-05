@@ -245,6 +245,9 @@ function HomePageClient() {
           <span className="text-lg font-heading font-bold text-biotech-white">Most Proteins</span>
         </Link>
         <div className="flex items-center gap-6">
+          <Link href="/shop" className="text-sm text-biotech-mint font-medium hover:text-biotech-white transition-colors">
+            Shop
+          </Link>
           <Link href="/" className="text-sm text-biotech-gray hover:text-biotech-white transition-colors">
             Products
           </Link>
