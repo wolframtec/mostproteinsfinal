@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /checkout
+Disallow: /checkout/complete
+
+Sitemap: https://mostproteins.com/sitemap.xml
