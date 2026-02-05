@@ -120,11 +120,17 @@ async function apiRequest<T>(
         };
       }
 
+      // Better error messages for common issues
+      let message = error.message;
+      if (message.includes('Failed to fetch') || message.includes('NetworkError') || message.includes('load failed')) {
+        message = 'Connection failed. Please check your internet connection or try disabling ad blockers/privacy extensions that may block requests to workers.dev.';
+      }
+
       return {
         success: false,
         error: {
           code: 'NETWORK_ERROR',
-          message: error.message,
+          message: message,
         },
       };
     }
