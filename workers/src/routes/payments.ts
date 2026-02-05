@@ -75,9 +75,13 @@ router.post('/create-intent', async (request, env, ctx) => {
     
     return new Response(JSON.stringify({
       success: true,
-      clientSecret: paymentIntent.client_secret,
-      paymentIntentId: paymentIntent.id,
-      status: paymentIntent.status,
+      data: {
+        clientSecret: paymentIntent.client_secret,
+        paymentIntentId: paymentIntent.id,
+        amount: paymentIntent.amount,
+        currency: paymentIntent.currency,
+        status: paymentIntent.status,
+      },
     }), {
       headers: { 'Content-Type': 'application/json' },
     });

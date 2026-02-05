@@ -109,11 +109,13 @@ router.post('/', async (request, env, ctx) => {
     
     return new Response(JSON.stringify({
       success: true,
-      orderId,
-      status: 'pending',
-      total: pricing.total,
-      currency: 'usd',
-      createdAt: now,
+      data: {
+        orderId,
+        status: 'pending',
+        total: pricing.total,
+        currency: 'usd',
+        createdAt: now,
+      },
       message: 'Order created successfully',
     }), {
       status: 201,
