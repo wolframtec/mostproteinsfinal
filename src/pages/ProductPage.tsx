@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { 
   ArrowLeft, ShoppingCart, Beaker, FileText, AlertTriangle, 
   Thermometer, Package, CheckCircle, Shield, Lock, Info,
-  X, ChevronRight
+  X
 } from 'lucide-react';
 import { useCart, type Product } from '../context';
 
