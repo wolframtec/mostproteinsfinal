@@ -47,7 +47,7 @@ function LoadingScreen({ onComplete }: { onComplete: () => void }) {
         </div>
       </div>
       <h2 className="mt-8 text-2xl font-heading font-bold text-biotech-white">Most Proteins</h2>
-      <p className="mt-2 text-biotech-gray text-sm">Research-Grade Peptides</p>
+      <p className="mt-2 text-biotech-gray text-sm">Make the Most of every opportunity</p>
       <div className="mt-8 w-48 h-1 bg-biotech-dark rounded-full overflow-hidden">
         <div className="h-full bg-biotech-mint transition-all duration-100" style={{ width: `${progress}%` }} />
       </div>
@@ -258,7 +258,7 @@ function HomePageClient() {
             MOST PROTEINS
           </h1>
           <p className="hero-content text-lg md:text-xl text-biotech-gray max-w-2xl mx-auto mb-8">
-            MOST OF ALL.
+            Make the Most of every opportunity.
           </p>
           <button
             onClick={() => document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' })}
