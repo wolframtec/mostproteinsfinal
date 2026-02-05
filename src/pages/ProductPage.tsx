@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { 
   ArrowLeft, ShoppingCart, Beaker, FileText, AlertTriangle, 
-  Thermometer, Package, CheckCircle, Shield, Lock, Info 
+  Thermometer, Package, CheckCircle, Shield, Lock, Info,
+  X, ChevronRight
 } from 'lucide-react';
 import { useCart, type Product } from '../context';
 
@@ -14,14 +15,22 @@ interface ProductPageProps {
 export default function ProductPage({ product, onBack, onCartClick }: ProductPageProps) {
   const { addItem, count } = useCart();
   const [quantity, setQuantity] = useState(1);
-  const [added, setAdded] = useState(false);
+  const [showAddedModal, setShowAddedModal] = useState(false);
 
   const handleAddToCart = () => {
     for (let i = 0; i < quantity; i++) {
       addItem(product);
     }
-    setAdded(true);
-    setTimeout(() => setAdded(false), 2000);
+    setShowAddedModal(true);
+  };
+
+  const handleViewCart = () => {
+    setShowAddedModal(false);
+    onCartClick?.();
+  };
+
+  const handleContinueShopping = () => {
+    setShowAddedModal(false);
   };
 
   return (
@@ -56,6 +65,52 @@ export default function ProductPage({ product, onBack, onCartClick }: ProductPag
           </p>
         </div>
       </div>
+
+      {/* Added to Cart Modal */}
+      {showAddedModal && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+          <div 
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm" 
+            onClick={handleContinueShopping}
+          />
+          <div className="relative bg-biotech-dark/95 backdrop-blur-xl border border-biotech-white/20 rounded-2xl p-6 max-w-sm w-full animate-in fade-in zoom-in duration-200">
+            <button 
+              onClick={handleContinueShopping}
+              className="absolute top-4 right-4 p-1 hover:bg-biotech-white/10 rounded-full transition-colors"
+            >
+              <X className="w-5 h-5 text-biotech-gray" />
+            </button>
+            
+            <div className="text-center">
+              <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <CheckCircle className="w-8 h-8 text-green-400" />
+              </div>
+              <h3 className="text-xl font-heading font-bold text-biotech-white mb-2">
+                Added to Cart
+              </h3>
+              <p className="text-biotech-gray text-sm mb-6">
+                {quantity} x {product.name} has been added to your research cart.
+              </p>
+              
+              <div className="space-y-3">
+                <button
+                  onClick={handleViewCart}
+                  className="w-full py-3 bg-biotech-mint text-biotech-black font-semibold rounded-xl hover:bg-biotech-mint/90 transition-colors flex items-center justify-center gap-2"
+                >
+                  <ShoppingCart className="w-5 h-5" />
+                  View Cart
+                </button>
+                <button
+                  onClick={handleContinueShopping}
+                  className="w-full py-3 bg-biotech-white/10 text-biotech-white font-medium rounded-xl hover:bg-biotech-white/20 transition-colors"
+                >
+                  Continue Shopping
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-6 py-12">
@@ -175,23 +230,10 @@ export default function ProductPage({ product, onBack, onCartClick }: ProductPag
 
               <button
                 onClick={handleAddToCart}
-                className={`w-full py-4 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all ${
-                  added 
-                    ? 'bg-green-500 text-white' 
-                    : 'bg-biotech-mint text-biotech-black hover:bg-biotech-mint/90'
-                }`}
+                className="w-full py-4 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all bg-biotech-mint text-biotech-black hover:bg-biotech-mint/90 hover:shadow-[0_0_24px_rgba(46,233,168,0.4)] active:scale-[0.98]"
               >
-                {added ? (
-                  <>
-                    <CheckCircle className="w-5 h-5" />
-                    Added to Cart
-                  </>
-                ) : (
-                  <>
-                    <ShoppingCart className="w-5 h-5" />
-                    Add to Research Cart - ${product.price * quantity}
-                  </>
-                )}
+                <ShoppingCart className="w-5 h-5" />
+                Add to Research Cart - ${product.price * quantity}
               </button>
 
               <div className="mt-4 flex items-center justify-center gap-2 text-sm text-biotech-gray">

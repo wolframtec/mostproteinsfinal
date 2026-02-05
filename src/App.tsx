@@ -897,12 +897,12 @@ function AppContent() {
           <div
             key={product.id}
             ref={(el) => { productRefs.current[index] = el; }}
-            className="section-pinned flex items-center justify-center cursor-pointer"
-            onClick={() => handleProductClick(product)}
+            className="section-pinned flex items-center justify-center"
           >
             <ProductCard
               product={product}
               isVisible={activeProductIndex === index}
+              onViewDetails={handleProductClick}
             />
           </div>
         ))}
