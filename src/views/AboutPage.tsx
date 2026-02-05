@@ -1,20 +1,10 @@
 import Link from 'next/link';
-import { ArrowLeft, Beaker, Shield, FileText, Mail, MapPin, Phone, CheckCircle, AlertTriangle } from 'lucide-react';
+import { Shield, FileText, Mail, MapPin, Phone, CheckCircle, AlertTriangle, Beaker } from 'lucide-react';
+import { Layout } from '@/components/Layout';
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-biotech-black">
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-center justify-between bg-biotech-black/90 backdrop-blur-xl border-b border-biotech-white/10">
-        <Link href="/" className="flex items-center gap-2 text-biotech-gray hover:text-biotech-white transition-colors">
-          <ArrowLeft className="w-5 h-5" />
-          <span>Back to Home</span>
-        </Link>
-        <div className="flex items-center gap-2">
-          <Beaker className="w-5 h-5 text-biotech-mint" />
-          <span className="font-heading font-bold text-biotech-white">Most Proteins</span>
-        </div>
-      </nav>
+    <Layout>
 
       <main className="pt-24 pb-12">
         {/* Hero */}
@@ -216,6 +206,6 @@ export default function AboutPage() {
           </div>
         </div>
       </footer>
-    </div>
+    </Layout>
   );
 }

@@ -1,44 +1,22 @@
 'use client';
 
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ShoppingCart, ArrowLeft, Dna, Search, Filter } from 'lucide-react';
+import { Search, Filter } from 'lucide-react';
 import { useCart } from '@/context';
 import { PRODUCTS } from '@/data/products';
 import Image from 'next/image';
+import { Layout } from '@/components/Layout';
 
 export default function ShopPage() {
   const router = useRouter();
-  const { count, addItem } = useCart();
+  const { addItem } = useCart();
 
   const handleAddToCart = (product: typeof PRODUCTS[0]) => {
     addItem(product);
   };
 
   return (
-    <div className="min-h-screen bg-biotech-black">
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-center justify-between bg-biotech-black/90 backdrop-blur-xl border-b border-biotech-white/10">
-        <div className="flex items-center gap-4">
-          <Link href="/" className="flex items-center gap-2 text-biotech-gray hover:text-biotech-white transition-colors">
-            <ArrowLeft className="w-5 h-5" />
-            <span className="hidden sm:inline">Back to Home</span>
-          </Link>
-        </div>
-        
-        <Link href="/" className="flex items-center gap-2">
-          <Dna className="w-6 h-6 text-biotech-mint" />
-          <span className="text-lg font-heading font-bold text-biotech-white">Most Proteins</span>
-        </Link>
-
-        <button
-          onClick={() => router.push('/checkout')}
-          className="flex items-center gap-2 px-4 py-2 bg-biotech-dark/80 backdrop-blur-sm border border-biotech-white/10 rounded-full hover:border-biotech-mint/50 transition-colors"
-        >
-          <ShoppingCart className="w-4 h-4 text-biotech-mint" />
-          <span className="text-sm text-biotech-white">{count}</span>
-        </button>
-      </nav>
+    <Layout>
 
       {/* Hero Section */}
       <div className="pt-24 pb-8 px-6">
@@ -215,6 +193,6 @@ export default function ShopPage() {
           </div>
         </div>
       </footer>
-    </div>
+    </Layout>
   );
 }
