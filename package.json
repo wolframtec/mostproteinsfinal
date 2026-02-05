@@ -8,7 +8,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "deploy": "wrangler pages deploy dist"
+    "deploy": "wrangler pages deploy dist",
+    "video:generate": "node scripts/generate-video-loop.js",
+    "video:loop": "./scripts/create-seamless-loop.sh"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
