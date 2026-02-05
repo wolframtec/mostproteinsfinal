@@ -66,7 +66,7 @@ function AboutSection() {
         <div className="glass-card p-8 md:p-12">
           <p className="label-mono text-biotech-mint mb-3">MOST</p>
           <h2 className="text-3xl md:text-4xl font-heading font-bold text-biotech-white mb-4">
-            Research peptides, packaged with clarity.
+            Packaged with clarity.
           </h2>
           <p className="text-biotech-gray text-lg leading-relaxed max-w-3xl">
             Most Proteins focuses on clean documentation, careful handling, and a frictionless path to
