@@ -5,6 +5,7 @@ import {
   useElements,
   ExpressCheckoutElement 
 } from '@stripe/react-stripe-js';
+import type { StripeExpressCheckoutElementConfirmEvent } from '@stripe/stripe-js';
 import { Lock, AlertCircle, CheckCircle, Wallet, CreditCard } from 'lucide-react';
 
 interface PaymentFormProps {
@@ -14,7 +15,7 @@ interface PaymentFormProps {
   totalAmount: number;
 }
 
-export function PaymentForm({ clientSecret: _clientSecret, onSuccess, onError, totalAmount }: PaymentFormProps) {
+export function PaymentForm({ clientSecret, onSuccess, onError, totalAmount }: PaymentFormProps) {
   const stripe = useStripe();
   const elements = useElements();
   const [isProcessing, setIsProcessing] = useState(false);
@@ -24,7 +25,7 @@ export function PaymentForm({ clientSecret: _clientSecret, onSuccess, onError, t
   const [expressCheckoutAvailable, setExpressCheckoutAvailable] = useState(false);
 
   // Handle Express Checkout (Apple Pay / Google Pay)
-  const handleExpressCheckout = async (event: any) => {
+  const handleExpressCheckout = async (event: StripeExpressCheckoutElementConfirmEvent) => {
     if (!stripe || !elements) return;
 
     setIsProcessing(true);
@@ -41,13 +42,13 @@ export function PaymentForm({ clientSecret: _clientSecret, onSuccess, onError, t
       });
 
       if (error) {
-        setPaymentError(error.message || 'Payment failed. Please try again.');
-        onError(error.message || 'Payment failed');
+        const message = error.message || 'Payment failed. Please try again.';
+        setPaymentError(message);
+        onError(message);
         setPaymentStatus('idle');
-        event.complete('fail');
+        event.paymentFailed({ reason: 'fail', message });
       } else {
         setPaymentStatus('succeeded');
-        event.complete('success');
         onSuccess();
       }
     } catch (err) {
@@ -55,7 +56,7 @@ export function PaymentForm({ clientSecret: _clientSecret, onSuccess, onError, t
       setPaymentError(errorMessage);
       onError(errorMessage);
       setPaymentStatus('idle');
-      event.complete('fail');
+      event.paymentFailed({ reason: 'fail', message: errorMessage });
     } finally {
       setIsProcessing(false);
     }

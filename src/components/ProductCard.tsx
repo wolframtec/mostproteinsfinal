@@ -12,33 +12,56 @@ export const ProductCard = ({ product, isVisible, onViewDetails }: ProductCardPr
   const cardRef = useRef<HTMLDivElement>(null);
   const { addItem } = useCart();
 
-  // 3D tilt effect
+  // 3D tilt effect (subtle, smoothed, and desktop-only)
   useEffect(() => {
     if (!cardRef.current) return;
     const card = cardRef.current;
 
-    const handleMove = (e: MouseEvent) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left - rect.width / 2;
-      const y = e.clientY - rect.top - rect.height / 2;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    if (prefersReducedMotion || !canHover) return;
+
+    let frame: number | null = null;
+    let tiltX = 0;
+    let tiltY = 0;
+    const maxTilt = 6;
+
+    const updateTransform = () => {
+      frame = null;
       card.style.transform = `
         translate(-50%, -50%)
-        perspective(1000px)
-        rotateY(${x / 20}deg)
-        rotateX(${-y / 20}deg)
-        scale(1.02)
+        perspective(1200px)
+        rotateX(${tiltX}deg)
+        rotateY(${tiltY}deg)
+        scale(1.01)
       `;
     };
 
-    const handleLeave = () => {
-      card.style.transform = 'translate(-50%, -50%) perspective(1000px) rotateY(0) rotateX(0) scale(1)';
+    const handleMove = (e: PointerEvent) => {
+      const rect = card.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width;
+      const y = (e.clientY - rect.top) / rect.height;
+      tiltY = (x - 0.5) * 2 * maxTilt;
+      tiltX = (0.5 - y) * 2 * maxTilt;
+      if (frame === null) {
+        frame = requestAnimationFrame(updateTransform);
+      }
     };
 
-    card.addEventListener('mousemove', handleMove);
-    card.addEventListener('mouseleave', handleLeave);
+    const handleLeave = () => {
+      tiltX = 0;
+      tiltY = 0;
+      card.style.transform = 'translate(-50%, -50%) perspective(1200px) rotateY(0) rotateX(0) scale(1)';
+    };
+
+    card.addEventListener('pointermove', handleMove);
+    card.addEventListener('pointerleave', handleLeave);
     return () => {
-      card.removeEventListener('mousemove', handleMove);
-      card.removeEventListener('mouseleave', handleLeave);
+      card.removeEventListener('pointermove', handleMove);
+      card.removeEventListener('pointerleave', handleLeave);
+      if (frame !== null) {
+        cancelAnimationFrame(frame);
+      }
     };
   }, []);
 

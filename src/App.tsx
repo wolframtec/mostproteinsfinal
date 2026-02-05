@@ -25,6 +25,7 @@ const AboutPage = lazy(() => import('./pages/AboutPage'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const TermsOfService = lazy(() => import('./pages/TermsOfService'));
 const CheckoutPage = lazy(() => import('./pages/CheckoutPage'));
+const CheckoutCompletePage = lazy(() => import('./pages/CheckoutCompletePage'));
 
 // ============================================
 // FDA COMPLIANCE - PRODUCT DATA
@@ -33,24 +34,10 @@ const CheckoutPage = lazy(() => import('./pages/CheckoutPage'));
 // ============================================
 const PRODUCTS: Product[] = [
   {
-    id: 'test-item',
-    name: 'TEST ITEM - $1',
-    description: 'Test product for checkout verification. Research compound placeholder for testing payment flow.',
-    price: 1,
-    image: '/images/bpc157-product.jpg',
-    label: 'TEST PRODUCT',
-    icon: <Beaker className="w-5 h-5" />,
-    casNumber: 'N/A',
-    molecularWeight: 'N/A',
-    purity: 'N/A',
-    storage: 'N/A',
-    sequence: 'TEST',
-  },
-  {
     id: 'bpc-157',
     name: 'BPC-157 (5mg)',
     description: 'Synthetic pentadecapeptide consisting of 15 amino acids. Research compound for laboratory studies on tissue repair mechanisms. Purity: ≥98% by HPLC.',
-    price: 89,
+    price: 178,
     image: '/images/bpc157-product.jpg',
     label: 'RESEARCH PEPTIDE',
     icon: <Activity className="w-5 h-5" />,
@@ -64,7 +51,7 @@ const PRODUCTS: Product[] = [
     id: 'ghk-cu',
     name: 'GHK-Cu (50mg)',
     description: 'Copper tripeptide-1 (glycyl-L-histidyl-L-lysine). Research compound for laboratory studies on extracellular matrix interactions. Purity: ≥99% by HPLC.',
-    price: 129,
+    price: 258,
     image: '/images/ghkcu-product.jpg',
     label: 'RESEARCH PEPTIDE',
     icon: <Sparkles className="w-5 h-5" />,
@@ -78,7 +65,7 @@ const PRODUCTS: Product[] = [
     id: 'epithalon',
     name: 'Epithalon (20mg)',
     description: 'Synthetic tetrapeptide (Ala-Glu-Asp-Gly). Research compound for laboratory studies on telomerase activity. Purity: ≥98% by HPLC.',
-    price: 149,
+    price: 298,
     image: '/images/epithalon-product.jpg',
     label: 'RESEARCH PEPTIDE',
     icon: <Dna className="w-5 h-5" />,
@@ -92,7 +79,7 @@ const PRODUCTS: Product[] = [
     id: 'tb-500',
     name: 'TB-500 (5mg)',
     description: 'Synthetic version of Thymosin Beta-4 (fragment 17-23). Research compound for laboratory studies on actin regulation. Purity: ≥98% by HPLC.',
-    price: 109,
+    price: 218,
     image: '/images/tb500-product.jpg',
     label: 'RESEARCH PEPTIDE',
     icon: <Shield className="w-5 h-5" />,
@@ -106,7 +93,7 @@ const PRODUCTS: Product[] = [
     id: 'cjc-ghrp',
     name: 'CJC-1295 + GHRP-2 (10mg Blend)',
     description: 'Research blend of modified GRF 1-29 and growth hormone secretagogue. For laboratory studies on GHRH receptor interactions. Purity: ≥98% by HPLC.',
-    price: 179,
+    price: 358,
     image: '/images/cjc-product.jpg',
     label: 'RESEARCH BLEND',
     icon: <Zap className="w-5 h-5" />,
@@ -693,8 +680,68 @@ function AppContent() {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeProductIndex, setActiveProductIndex] = useState(-1);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [currentView, setCurrentView] = useState<'home' | 'product' | 'about' | 'checkout' | 'privacy' | 'terms'>('home');
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  type View = 'home' | 'product' | 'about' | 'checkout' | 'checkout-complete' | 'privacy' | 'terms';
+
+  const normalizePath = (path: string) => {
+    if (path === '/') return '/';
+    return path.replace(/\/+$/, '');
+  };
+
+  const findProductById = (id?: string | null) => {
+    if (!id) return null;
+    return PRODUCTS.find(product => product.id === id) || null;
+  };
+
+  const getProductFromLocation = () => {
+    const path = normalizePath(window.location.pathname);
+    const params = new URLSearchParams(window.location.search);
+    const legacyId = params.get('id');
+
+    if (path === '/product' && legacyId) {
+      return findProductById(legacyId);
+    }
+
+    const segments = path.split('/').filter(Boolean);
+    if (segments[0] === 'product' && segments[1]) {
+      const slug = decodeURIComponent(segments[1]);
+      return findProductById(slug);
+    }
+
+    return null;
+  };
+
+  const getInitialView = (): View => {
+    const path = normalizePath(window.location.pathname);
+    const params = new URLSearchParams(window.location.search);
+    if (path.startsWith('/checkout/complete')) return 'checkout-complete';
+    if (path.startsWith('/checkout')) return 'checkout';
+    if (path.startsWith('/about')) return 'about';
+    if (path.startsWith('/privacy')) return 'privacy';
+    if (path.startsWith('/terms')) return 'terms';
+    if (path.startsWith('/product/') || (path === '/product' && params.get('id'))) return 'product';
+    return 'home';
+  };
+
+  const viewPaths: Record<View, string> = {
+    home: '/',
+    product: '/product',
+    about: '/about',
+    checkout: '/checkout',
+    'checkout-complete': '/checkout/complete',
+    privacy: '/privacy',
+    terms: '/terms',
+  };
+
+  const buildPath = (view: View, productId?: string) => {
+    if (view === 'product') {
+      return productId ? `/product/${encodeURIComponent(productId)}` : viewPaths.product;
+    }
+    return viewPaths[view];
+  };
+
+  const initialProduct = getProductFromLocation();
+  const [currentView, setCurrentView] = useState<View>(() => initialProduct ? 'product' : getInitialView());
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(() => initialProduct);
 
   const { count } = useCart();
 
@@ -762,17 +809,72 @@ function AppContent() {
     return () => ctx.revert();
   }, [isLoading]);
 
+  const navigate = (view: View, options?: { replace?: boolean; productId?: string }) => {
+    const path = buildPath(view, options?.productId);
+    if (options?.replace) {
+      window.history.replaceState(null, '', path);
+    } else {
+      window.history.pushState(null, '', path);
+    }
+    setCurrentView(view);
+  };
+
   const handleProductClick = (product: Product) => {
     setSelectedProduct(product);
-    setCurrentView('product');
+    navigate('product', { productId: product.id });
     window.scrollTo(0, 0);
   };
 
   const handleCheckout = () => {
     setIsCartOpen(false);
-    setCurrentView('checkout');
+    navigate('checkout');
     window.scrollTo(0, 0);
   };
+
+  // Sync view with browser navigation + deep links
+  useEffect(() => {
+    const syncFromLocation = () => {
+      const path = normalizePath(window.location.pathname);
+      const params = new URLSearchParams(window.location.search);
+
+      if (path.startsWith('/product')) {
+        const productFromSlug = getProductFromLocation();
+        const productId = params.get('id');
+        const productFromQuery = findProductById(productId);
+        const product = productFromSlug || productFromQuery;
+
+        if (product) {
+          setSelectedProduct(product);
+          setCurrentView('product');
+        } else {
+          setSelectedProduct(null);
+          window.history.replaceState(null, '', '/');
+          setCurrentView('home');
+        }
+        return;
+      }
+
+      setSelectedProduct(null);
+
+      if (path.startsWith('/checkout/complete')) {
+        setCurrentView('checkout-complete');
+      } else if (path.startsWith('/checkout')) {
+        setCurrentView('checkout');
+      } else if (path.startsWith('/about')) {
+        setCurrentView('about');
+      } else if (path.startsWith('/privacy')) {
+        setCurrentView('privacy');
+      } else if (path.startsWith('/terms')) {
+        setCurrentView('terms');
+      } else {
+        setCurrentView('home');
+      }
+    };
+
+    syncFromLocation();
+    window.addEventListener('popstate', syncFromLocation);
+    return () => window.removeEventListener('popstate', syncFromLocation);
+  }, []);
 
   if (isLoading) {
     return <LoadingScreen onComplete={() => setIsLoading(false)} />;
@@ -784,7 +886,7 @@ function AppContent() {
       <Suspense fallback={<div className="min-h-screen bg-biotech-black flex items-center justify-center"><Dna className="w-12 h-12 text-biotech-mint animate-spin" /></div>}>
         <ProductPage 
           product={selectedProduct} 
-          onBack={() => setCurrentView('home')} 
+          onBack={() => navigate('home')} 
           onCartClick={() => setIsCartOpen(true)}
         />
       </Suspense>
@@ -794,7 +896,18 @@ function AppContent() {
   if (currentView === 'checkout') {
     return (
       <Suspense fallback={<div className="min-h-screen bg-biotech-black flex items-center justify-center"><Dna className="w-12 h-12 text-biotech-mint animate-spin" /></div>}>
-        <CheckoutPage onBack={() => setCurrentView('home')} />
+        <CheckoutPage onBack={() => navigate('home')} />
+      </Suspense>
+    );
+  }
+
+  if (currentView === 'checkout-complete') {
+    return (
+      <Suspense fallback={<div className="min-h-screen bg-biotech-black flex items-center justify-center"><Dna className="w-12 h-12 text-biotech-mint animate-spin" /></div>}>
+        <CheckoutCompletePage 
+          onBack={() => navigate('home', { replace: true })}
+          onRetry={() => navigate('checkout', { replace: true })}
+        />
       </Suspense>
     );
   }
@@ -802,7 +915,7 @@ function AppContent() {
   if (currentView === 'about') {
     return (
       <Suspense fallback={<div className="min-h-screen bg-biotech-black flex items-center justify-center"><Dna className="w-12 h-12 text-biotech-mint animate-spin" /></div>}>
-        <AboutPage onBack={() => setCurrentView('home')} />
+        <AboutPage onBack={() => navigate('home')} />
       </Suspense>
     );
   }
@@ -810,7 +923,7 @@ function AppContent() {
   if (currentView === 'privacy') {
     return (
       <Suspense fallback={<div className="min-h-screen bg-biotech-black flex items-center justify-center"><Dna className="w-12 h-12 text-biotech-mint animate-spin" /></div>}>
-        <PrivacyPolicy onBack={() => setCurrentView('home')} />
+        <PrivacyPolicy onBack={() => navigate('home')} />
       </Suspense>
     );
   }
@@ -818,7 +931,7 @@ function AppContent() {
   if (currentView === 'terms') {
     return (
       <Suspense fallback={<div className="min-h-screen bg-biotech-black flex items-center justify-center"><Dna className="w-12 h-12 text-biotech-mint animate-spin" /></div>}>
-        <TermsOfService onBack={() => setCurrentView('home')} />
+        <TermsOfService onBack={() => navigate('home')} />
       </Suspense>
     );
   }
@@ -845,18 +958,28 @@ function AppContent() {
 
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-center justify-between bg-gradient-to-b from-biotech-black/80 to-transparent">
-        <div className="flex items-center gap-2 cursor-pointer" onClick={() => setCurrentView('home')}>
+        <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('home')}>
           <Dna className="w-6 h-6 text-biotech-mint" />
           <span className="text-lg font-heading font-bold text-biotech-white">Most Proteins</span>
         </div>
         <div className="flex items-center gap-6">
-          <button onClick={() => setCurrentView('home')} className="text-sm text-biotech-gray hover:text-biotech-white transition-colors">
+          <button onClick={() => navigate('home')} className="text-sm text-biotech-gray hover:text-biotech-white transition-colors">
             Products
           </button>
-          <button onClick={() => setCurrentView('about')} className="text-sm text-biotech-gray hover:text-biotech-white transition-colors">
+          <button onClick={() => navigate('about')} className="text-sm text-biotech-gray hover:text-biotech-white transition-colors">
             About
           </button>
-          <a href="#subscribe" onClick={() => setCurrentView('home')} className="text-sm text-biotech-gray hover:text-biotech-white transition-colors">
+          <a
+            href="#subscribe"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate('home');
+              requestAnimationFrame(() => {
+                document.getElementById('subscribe')?.scrollIntoView({ behavior: 'smooth' });
+              });
+            }}
+            className="text-sm text-biotech-gray hover:text-biotech-white transition-colors"
+          >
             Contact
           </a>
           <button
@@ -927,10 +1050,10 @@ function AppContent() {
               Must be 21 years or older to purchase.
             </p>
             <div className="flex items-center gap-4">
-              <button onClick={() => setCurrentView('privacy')} className="text-sm text-biotech-gray hover:text-biotech-white transition-colors">
+              <button onClick={() => navigate('privacy')} className="text-sm text-biotech-gray hover:text-biotech-white transition-colors">
                 Privacy
               </button>
-              <button onClick={() => setCurrentView('terms')} className="text-sm text-biotech-gray hover:text-biotech-white transition-colors">
+              <button onClick={() => navigate('terms')} className="text-sm text-biotech-gray hover:text-biotech-white transition-colors">
                 Terms
               </button>
             </div>
