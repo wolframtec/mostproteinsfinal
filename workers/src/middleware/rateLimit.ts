@@ -52,7 +52,7 @@ export const rateLimit: Handler = async (request, env, ctx) => {
   
   // Continue to next handler (rate limiting implemented via Cloudflare dashboard in production)
   // Return null to continue processing
-  return new Response(null, { status: 404 });
+  return null as unknown as Response;
 };
 
 // Alternative: Use Cloudflare Rate Limiting Rules

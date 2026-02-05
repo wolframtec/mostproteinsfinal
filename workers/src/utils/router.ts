@@ -22,11 +22,12 @@ export class Router {
     if (typeof pathOrHandler === 'string' && handler) {
       // Mount sub-router at path
       if (handler instanceof Router) {
-        const prefix = pathOrHandler;
+        const prefix = pathOrHandler.replace(/\/$/, ''); // Remove trailing slash from prefix
         for (const route of handler.getRoutes()) {
+          const routePath = route.path === '/' ? prefix : prefix + route.path;
           this.routes.push({
             method: route.method,
-            path: prefix + route.path,
+            path: routePath,
             handler: route.handler,
           });
         }
@@ -81,10 +82,15 @@ export class Router {
         // Run middlewares first
         for (const middleware of this.middlewares) {
           const result = await middleware(request, env, ctx, match.params);
-          // If middleware returns a response with status >= 400, return it
-          if (result instanceof Response && result.status >= 400) {
-            return result;
+          // If middleware returns a response, check if it's an error
+          if (result instanceof Response) {
+            // If status >= 400, return the error response
+            if (result.status >= 400) {
+              return result;
+            }
+            // If status is < 400 but not null, continue (middleware handled it)
           }
+          // If result is null/undefined, continue to next middleware
         }
 
         // Call route handler
@@ -107,8 +113,12 @@ export class Router {
 
   // Match path with parameters
   private matchPath(routePath: string, requestPath: string): { matched: boolean; params?: Record<string, string> } | null {
+    // Normalize paths (remove trailing slashes)
+    const normalizedRoutePath = routePath.replace(/\/$/, '') || '/';
+    const normalizedRequestPath = requestPath.replace(/\/$/, '') || '/';
+    
     // Handle exact match
-    if (routePath === requestPath) {
+    if (normalizedRoutePath === normalizedRequestPath) {
       return { matched: true, params: {} };
     }
 

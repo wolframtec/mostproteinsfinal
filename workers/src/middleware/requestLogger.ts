@@ -25,8 +25,8 @@ export const requestLogger: Handler = async (request, env, ctx) => {
   
   console.log('Request:', JSON.stringify(logData));
   
-  // Continue processing (return 404 to let router handle actual route)
-  return new Response(null, { status: 404 });
+  // Continue processing - return null to indicate success
+  return null as unknown as Response;
 };
 
 // Structured logger for consistent log format
