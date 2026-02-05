@@ -111,6 +111,9 @@ router.post('/', async (request, env, ctx) => {
       success: true,
       orderId,
       status: 'pending',
+      total: pricing.total,
+      currency: 'usd',
+      createdAt: now,
       message: 'Order created successfully',
     }), {
       status: 201,
