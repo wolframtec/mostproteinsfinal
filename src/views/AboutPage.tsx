@@ -1,5 +1,4 @@
-import Link from 'next/link';
-import { Shield, FileText, Mail, MapPin, Phone, CheckCircle, AlertTriangle, Beaker } from 'lucide-react';
+import { Shield, FileText, Mail, MapPin, Phone, CheckCircle, AlertTriangle } from 'lucide-react';
 import { Layout } from '@/components/Layout';
 
 export default function AboutPage() {

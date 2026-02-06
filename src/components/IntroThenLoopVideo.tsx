@@ -81,13 +81,13 @@ export function IntroThenLoopVideo({
       const playVideo = async () => {
         try {
           await introVideo.play();
-        } catch (err) {
+        } catch {
           console.log('Autoplay blocked, waiting for interaction');
           // Try muted autoplay which is allowed on mobile
           introVideo.muted = true;
           try {
             await introVideo.play();
-          } catch (err2) {
+          } catch {
             console.log('Muted autoplay also failed');
           }
         }

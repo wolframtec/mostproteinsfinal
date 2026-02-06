@@ -70,7 +70,7 @@ export default function CheckoutCompletePage({ onBack, onRetry }: CheckoutComple
             currency: 'USD'
           });
         }
-      } catch (e) {
+      } catch {
         console.log('Conversion tracking error');
       }
     };

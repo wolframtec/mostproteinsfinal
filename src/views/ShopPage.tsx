@@ -1,14 +1,13 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { Search, Filter } from 'lucide-react';
+import Link from 'next/link';
+import { Search, Filter, Dna } from 'lucide-react';
 import { useCart } from '@/context';
 import { PRODUCTS } from '@/data/products';
 import Image from 'next/image';
 import { Layout } from '@/components/Layout';
 
 export default function ShopPage() {
-  const router = useRouter();
   const { addItem } = useCart();
 
   const handleAddToCart = (product: typeof PRODUCTS[0]) => {
