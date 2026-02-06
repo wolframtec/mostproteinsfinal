@@ -102,7 +102,7 @@ export default function ShopPage() {
                   {/* Price and Actions */}
                   <div className="flex items-center justify-between pt-4 border-t border-biotech-white/10">
                     <div>
-                      <p className="text-2xl font-bold text-biotech-white">
+                      <p className="text-2xl font-number font-bold text-biotech-white tabular-nums tracking-tight">
                         ${product.price}
                       </p>
                       <p className="text-xs text-biotech-gray">USD</p>

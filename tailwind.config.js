@@ -74,8 +74,10 @@ module.exports = {
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
-        heading: ['Space Grotesk', 'Sora', 'system-ui', 'sans-serif'],
+        heading: ['VCR OSD MONO', 'monospace'],
+        body: ['IBM Plex Mono', 'monospace'],
         mono: ['IBM Plex Mono', 'monospace'],
+        number: ['DotGothic16', 'monospace'],
       },
       keyframes: {
         "accordion-down": {

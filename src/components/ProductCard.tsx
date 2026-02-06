@@ -155,7 +155,7 @@ export const ProductCard = ({ product, isVisible, onViewDetails }: ProductCardPr
         </h3>
 
         {/* Description */}
-        <p className="text-xs sm:text-sm text-white/60 leading-relaxed line-clamp-3 sm:line-clamp-2">
+        <p className="text-xs sm:text-sm text-white/60 leading-7 line-clamp-3 sm:line-clamp-2 font-body">
           {product.description}
         </p>
 
@@ -163,7 +163,7 @@ export const ProductCard = ({ product, isVisible, onViewDetails }: ProductCardPr
         <div className="flex items-center justify-between pt-1 sm:pt-2">
           <div className="flex flex-col">
             <span className="text-[10px] sm:text-xs text-white/40 font-mono uppercase tracking-wider">Price</span>
-            <span className="text-2xl sm:text-3xl font-heading font-bold text-white">
+            <span className="text-2xl sm:text-3xl font-number font-bold text-white tabular-nums tracking-tight">
               ${product.price}
             </span>
           </div>

@@ -106,7 +106,7 @@ export function StripeProvider({ children, clientSecret }: StripeProviderProps) 
         colorText: '#F4F6FA',
         colorDanger: '#ef4444',
         borderRadius: '12px',
-        fontFamily: 'Inter, sans-serif',
+        fontFamily: 'IBM Plex Mono, monospace',
         spacingUnit: '4px',
         fontSizeBase: '14px',
       },
