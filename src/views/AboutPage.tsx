@@ -167,8 +167,8 @@ export default function AboutPage() {
                 <Mail className="w-5 h-5 text-biotech-mint flex-shrink-0 mt-1" />
                 <div>
                   <p className="text-sm text-biotech-gray mb-1">Email</p>
-                  <a href="mailto:research@mostproteins.com" className="text-biotech-white hover:text-biotech-mint transition-colors">
-                    research@mostproteins.com
+                  <a href="mailto:service@mostproteins.com" className="text-biotech-white hover:text-biotech-mint transition-colors">
+                    service@mostproteins.com
                   </a>
                 </div>
               </div>
@@ -184,7 +184,7 @@ export default function AboutPage() {
                 <MapPin className="w-5 h-5 text-biotech-mint flex-shrink-0 mt-1" />
                 <div>
                   <p className="text-sm text-biotech-gray mb-1">Location</p>
-                  <p className="text-biotech-white">San Francisco, CA</p>
+                  <p className="text-biotech-white">Newport Beach, CA</p>
                   <p className="text-xs text-biotech-gray/60">Shipping worldwide</p>
                 </div>
               </div>

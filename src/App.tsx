@@ -109,7 +109,7 @@ function SubscribeSection() {
           </div>
           <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
             <a
-              href="mailto:research@mostproteins.com"
+              href="mailto:service@mostproteins.com"
               className="btn-primary text-center"
             >
               Contact Research

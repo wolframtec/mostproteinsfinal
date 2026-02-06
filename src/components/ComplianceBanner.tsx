@@ -127,8 +127,8 @@ export function ComplianceBanner() {
                   <h4 className="text-biotech-white font-semibold mb-2">Contact Information</h4>
                   <p>
                     For questions about our products or compliance requirements, please contact us at{' '}
-                    <a href="mailto:research@mostproteins.com" className="text-biotech-mint hover:underline">
-                      research@mostproteins.com
+                    <a href="mailto:service@mostproteins.com" className="text-biotech-mint hover:underline">
+                      service@mostproteins.com
                     </a>
                   </p>
                 </section>

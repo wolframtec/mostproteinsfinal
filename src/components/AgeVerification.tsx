@@ -66,7 +66,7 @@ export function AgeVerification() {
             Our products are sold strictly for research purposes to qualified researchers.
           </p>
           <p className="text-sm text-biotech-gray/60">
-            If you believe this is an error, please contact us at research@mostproteins.com
+            If you believe this is an error, please contact us at service@mostproteins.com
           </p>
         </div>
       </div>

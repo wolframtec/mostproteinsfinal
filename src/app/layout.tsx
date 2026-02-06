@@ -109,7 +109,7 @@ const organizationSchema = {
   ],
   contactPoint: {
     '@type': 'ContactPoint',
-    email: 'research@mostproteins.com',
+    email: 'service@mostproteins.com',
     contactType: 'Research Support',
     availableLanguage: ['English'],
   },

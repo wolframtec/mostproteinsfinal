@@ -223,7 +223,7 @@ export default function PrivacyPolicy() {
                 </p>
                 <div className="bg-biotech-dark rounded-lg p-4">
                   <p className="text-biotech-white font-semibold">Most Proteins</p>
-                  <p className="text-biotech-gray">San Francisco, CA</p>
+                  <p className="text-biotech-gray">Newport Beach, CA</p>
                   <a href="mailto:privacy@mostproteins.com" className="text-biotech-mint hover:underline">
                     privacy@mostproteins.com
                   </a>

@@ -274,7 +274,7 @@ export default function TermsOfService() {
                   These Terms shall be governed by and construed in accordance with the laws of the 
                   State of California, without regard to its conflict of law provisions. Any legal 
                   suit, action, or proceeding arising out of or related to these Terms shall be 
-                  instituted exclusively in the federal or state courts located in San Francisco County, 
+                  instituted exclusively in the federal or state courts located in Orange County, 
                   California.
                 </p>
               </div>
@@ -315,7 +315,7 @@ export default function TermsOfService() {
                 </p>
                 <div className="bg-biotech-dark rounded-lg p-4">
                   <p className="text-biotech-white font-semibold">Most Proteins</p>
-                  <p className="text-biotech-gray">San Francisco, CA</p>
+                  <p className="text-biotech-gray">Newport Beach, CA</p>
                   <a href="mailto:legal@mostproteins.com" className="text-biotech-mint hover:underline">
                     legal@mostproteins.com
                   </a>
