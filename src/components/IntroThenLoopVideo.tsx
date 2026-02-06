@@ -25,6 +25,7 @@ export function IntroThenLoopVideo({
   const [introEnded, setIntroEnded] = useState(false);
   const [skipIntro, setSkipIntro] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [videoError, setVideoError] = useState(false);
 
   useEffect(() => {
     // Check if intro was recently played
@@ -36,13 +37,11 @@ export function IntroThenLoopVideo({
         const minutesSince = (now - playedTime) / (1000 * 60);
         
         if (minutesSince < rememberDurationMinutes) {
-          // Skip intro, go straight to loop
           setSkipIntro(true);
           setShowIntro(false);
           return;
         }
       }
-      // Will play intro
       setSkipIntro(false);
     };
 
@@ -56,56 +55,103 @@ export function IntroThenLoopVideo({
     const loopVideo = loopVideoRef.current;
 
     if (introVideo && loopVideo) {
-      // Preload the loop video while intro plays
       loopVideo.load();
 
-      // When intro ends, switch to loop
       const handleIntroEnded = () => {
         setIntroEnded(true);
-        
-        // Record that intro was played
         localStorage.setItem(STORAGE_KEY, Date.now().toString());
         
-        // Crossfade delay
         setTimeout(() => {
           setShowIntro(false);
-          loopVideo.play().catch(() => {
-            console.log('Loop video autoplay blocked');
+          loopVideo.play().catch((err) => {
+            console.log('Loop video autoplay blocked:', err);
           });
         }, 100);
       };
 
+      const handleError = (e: Event) => {
+        console.error('Video error:', e);
+        setVideoError(true);
+      };
+
       introVideo.addEventListener('ended', handleIntroEnded);
+      introVideo.addEventListener('error', handleError);
       
-      // Start playing intro
-      introVideo.play().catch(() => {
-        console.log('Intro video autoplay blocked');
-      });
+      // Mobile-friendly autoplay
+      const playVideo = async () => {
+        try {
+          await introVideo.play();
+        } catch (err) {
+          console.log('Autoplay blocked, waiting for interaction');
+          // Try muted autoplay which is allowed on mobile
+          introVideo.muted = true;
+          try {
+            await introVideo.play();
+          } catch (err2) {
+            console.log('Muted autoplay also failed');
+          }
+        }
+      };
+      
+      playVideo();
 
       return () => {
         introVideo.removeEventListener('ended', handleIntroEnded);
+        introVideo.removeEventListener('error', handleError);
       };
     }
   }, [skipIntro]);
 
   useEffect(() => {
     if (skipIntro && loopVideoRef.current) {
-      // Start loop immediately if skipping intro
-      loopVideoRef.current.play().catch(() => {
-        console.log('Loop video autoplay blocked');
-      });
+      const playLoop = async () => {
+        try {
+          await loopVideoRef.current?.play();
+        } catch (err) {
+          console.log('Loop autoplay blocked:', err);
+        }
+      };
+      playLoop();
     }
   }, [skipIntro]);
 
+  // Fallback for video errors
+  if (videoError) {
+    return (
+      <div className="fixed inset-0 z-0 overflow-hidden">
+        <div 
+          className="absolute inset-0 bg-biotech-black"
+          style={{
+            background: 'radial-gradient(ellipse at center, #1a1d26 0%, #0B0C10 100%)'
+          }}
+        />
+        <div 
+          className="absolute inset-0 bg-biotech-black pointer-events-none"
+          style={{ opacity: overlayOpacity }}
+        />
+        <div 
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: `
+              radial-gradient(ellipse at 50% 0%, transparent 0%, rgba(11, 12, 16, 0.4) 100%),
+              radial-gradient(ellipse at 50% 100%, rgba(11, 12, 16, 0.8) 0%, transparent 60%)
+            `
+          }}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="fixed inset-0 z-0 overflow-hidden">
-      {/* Intro Video (plays once, then crossfades) */}
+      {/* Intro Video */}
       {showIntro && (
         <video
           ref={introVideoRef}
           muted
           playsInline
           poster={posterSrc}
+          preload="auto"
           onLoadedData={() => setIsLoaded(true)}
           className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
             introEnded ? 'opacity-0' : 'opacity-100'
@@ -116,12 +162,13 @@ export function IntroThenLoopVideo({
         </video>
       )}
 
-      {/* Loop Video (starts after intro, loops forever) */}
+      {/* Loop Video */}
       <video
         ref={loopVideoRef}
         loop
         muted
         playsInline
+        preload="auto"
         autoPlay={skipIntro}
         className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
           showIntro ? 'opacity-0' : 'opacity-100'
@@ -131,13 +178,11 @@ export function IntroThenLoopVideo({
         <source src={loopSrc} type="video/mp4" />
       </video>
 
-      {/* Dark Overlay */}
+      {/* Overlays */}
       <div 
         className="absolute inset-0 bg-biotech-black pointer-events-none"
         style={{ opacity: overlayOpacity }}
       />
-
-      {/* Gradient Overlay */}
       <div 
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -147,8 +192,6 @@ export function IntroThenLoopVideo({
           `
         }}
       />
-
-      {/* Noise Overlay */}
       <div 
         className="absolute inset-0 opacity-[0.03] pointer-events-none"
         style={{

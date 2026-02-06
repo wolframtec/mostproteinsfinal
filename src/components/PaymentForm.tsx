@@ -1,13 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   PaymentElement, 
   useStripe, 
   useElements,
   ExpressCheckoutElement 
 } from '@stripe/react-stripe-js';
-import type { StripeExpressCheckoutElementConfirmEvent } from '@stripe/stripe-js';
+import type { StripeExpressCheckoutElementConfirmEvent, StripeExpressCheckoutElementOptions } from '@stripe/stripe-js';
 import { Lock, AlertCircle, CheckCircle, Wallet, CreditCard } from 'lucide-react';
 
 interface PaymentFormProps {
@@ -25,8 +25,17 @@ export function PaymentForm({ clientSecret, onSuccess, onError, totalAmount }: P
   const [paymentStatus, setPaymentStatus] = useState<'idle' | 'processing' | 'succeeded'>('idle');
   const [expressCheckoutReady, setExpressCheckoutReady] = useState(false);
   const [expressCheckoutAvailable, setExpressCheckoutAvailable] = useState(false);
+  const [applePayAvailable, setApplePayAvailable] = useState(false);
 
-  // Handle Express Checkout (Apple Pay / Google Pay)
+  // Check if Apple Pay is available on device
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.ApplePaySession) {
+      const canMakePayments = window.ApplePaySession.canMakePayments;
+      setApplePayAvailable(canMakePayments);
+      console.log('Apple Pay available:', canMakePayments);
+    }
+  }, []);
+
   const handleExpressCheckout = async (event: StripeExpressCheckoutElementConfirmEvent) => {
     if (!stripe || !elements) return;
 
@@ -77,7 +86,6 @@ export function PaymentForm({ clientSecret, onSuccess, onError, totalAmount }: P
     setPaymentStatus('processing');
 
     try {
-      // Confirm the payment using the PaymentElement
       const { error, paymentIntent } = await stripe.confirmPayment({
         elements,
         confirmParams: {
@@ -87,18 +95,14 @@ export function PaymentForm({ clientSecret, onSuccess, onError, totalAmount }: P
       });
 
       if (error) {
-        // Payment failed
         setPaymentError(error.message || 'Payment failed. Please try again.');
         onError(error.message || 'Payment failed');
         setPaymentStatus('idle');
       } else if (paymentIntent) {
-        // Payment succeeded
         if (paymentIntent.status === 'succeeded') {
           setPaymentStatus('succeeded');
           onSuccess();
         } else if (paymentIntent.status === 'requires_action') {
-          // 3D Secure or other authentication required
-          // Stripe.js handles this automatically
           setPaymentStatus('processing');
         } else {
           setPaymentError(`Payment status: ${paymentIntent.status}. Please contact support.`);
@@ -115,8 +119,30 @@ export function PaymentForm({ clientSecret, onSuccess, onError, totalAmount }: P
     }
   };
 
-  // Format amount for display
   const formattedAmount = (totalAmount / 100).toFixed(2);
+
+  // Express Checkout options with Apple Pay configuration
+  const expressCheckoutOptions: StripeExpressCheckoutElementOptions = {
+    buttonType: {
+      applePay: 'buy',
+      googlePay: 'buy',
+    },
+    buttonHeight: 48,
+    layout: {
+      maxColumns: 2,
+      maxRows: 1,
+    },
+    wallets: {
+      applePay: 'auto',
+      googlePay: 'auto',
+    },
+    // Payment methods configuration
+    paymentMethods: {
+      applePay: 'always',
+      googlePay: 'always',
+      link: 'auto',
+    },
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -125,11 +151,17 @@ export function PaymentForm({ clientSecret, onSuccess, onError, totalAmount }: P
         <label className="block text-sm text-biotech-gray mb-3 flex items-center gap-2">
           <Wallet className="w-4 h-4" />
           Quick Checkout
+          {applePayAvailable && (
+            <span className="text-xs text-biotech-mint ml-auto">Apple Pay detected</span>
+          )}
         </label>
+        
         <ExpressCheckoutElement
           onReady={({ availablePaymentMethods }) => {
             setExpressCheckoutReady(true);
-            setExpressCheckoutAvailable(!!availablePaymentMethods);
+            const hasExpress = !!availablePaymentMethods;
+            setExpressCheckoutAvailable(hasExpress);
+            console.log('Express checkout available:', hasExpress, availablePaymentMethods);
           }}
           onClick={({ resolve }) => {
             const total = totalAmount;
@@ -143,36 +175,32 @@ export function PaymentForm({ clientSecret, onSuccess, onError, totalAmount }: P
             });
           }}
           onConfirm={handleExpressCheckout}
-          options={{
-            buttonType: {
-              applePay: 'buy',
-              googlePay: 'buy',
-            },
-            buttonHeight: 48,
-            layout: {
-              maxColumns: 2,
-              maxRows: 1,
-            },
-          }}
+          options={expressCheckoutOptions}
         />
         
-        {/* Show loading state while express checkout initializes */}
+        {/* Show loading state */}
         {!expressCheckoutReady && (
           <div className="flex items-center justify-center gap-2 py-3">
             <div className="w-4 h-4 border-2 border-biotech-mint/30 border-t-biotech-mint rounded-full animate-spin" />
-            <span className="text-xs text-biotech-gray">Checking for express checkout options...</span>
+            <span className="text-xs text-biotech-gray">Loading payment options...</span>
           </div>
         )}
         
-        {/* Show message if no express checkout available */}
+        {/* Show message if no express checkout */}
         {expressCheckoutReady && !expressCheckoutAvailable && (
-          <p className="text-xs text-biotech-gray/60 mt-2 text-center">
-            Apple Pay and Google Pay are not available on this device
-          </p>
+          <div className="text-xs text-biotech-gray/60 mt-2 text-center">
+            <p>Apple Pay and Google Pay not available</p>
+            <p className="mt-1">Please use card payment below</p>
+            {applePayAvailable && (
+              <p className="text-yellow-500 mt-1">
+                Note: Apple Pay is supported on this device but may require domain verification in Stripe.
+              </p>
+            )}
+          </div>
         )}
       </div>
 
-      {/* Divider - only show if express checkout is available */}
+      {/* Divider */}
       {(!expressCheckoutReady || expressCheckoutAvailable) && (
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
@@ -191,7 +219,6 @@ export function PaymentForm({ clientSecret, onSuccess, onError, totalAmount }: P
           Card Information
         </label>
         
-        {/* Payment Element - Card Input */}
         <div className="p-4 bg-biotech-dark rounded-lg border border-biotech-white/10">
           <PaymentElement 
             key={clientSecret}
@@ -202,16 +229,11 @@ export function PaymentForm({ clientSecret, onSuccess, onError, totalAmount }: P
           />
         </div>
         
-        {/* Card Logos */}
         <div className="flex items-center gap-2 mt-4">
           <div className="flex gap-2">
-            {/* Visa */}
             <div className="w-10 h-6 bg-white/10 rounded flex items-center justify-center text-[10px] text-white/60 font-medium">VISA</div>
-            {/* Mastercard */}
             <div className="w-10 h-6 bg-white/10 rounded flex items-center justify-center text-[10px] text-white/60 font-medium">MC</div>
-            {/* Amex */}
             <div className="w-10 h-6 bg-white/10 rounded flex items-center justify-center text-[10px] text-white/60 font-medium">AMEX</div>
-            {/* Discover */}
             <div className="w-10 h-6 bg-white/10 rounded flex items-center justify-center text-[10px] text-white/60 font-medium">DISC</div>
           </div>
           <span className="text-xs text-biotech-gray/60 ml-auto flex items-center gap-1">
@@ -249,38 +271,18 @@ export function PaymentForm({ clientSecret, onSuccess, onError, totalAmount }: P
       {/* Submit Button */}
       <button
         type="submit"
-        disabled={isProcessing || !stripe || paymentStatus === 'succeeded'}
-        className="w-full py-4 bg-biotech-mint text-biotech-black font-semibold rounded-xl hover:bg-biotech-mint/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+        disabled={isProcessing || !stripe}
+        className="w-full btn-primary py-4 text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isProcessing ? (
-          <>
+          <span className="flex items-center justify-center gap-2">
             <div className="w-5 h-5 border-2 border-biotech-black/30 border-t-biotech-black rounded-full animate-spin" />
-            Processing Payment...
-          </>
-        ) : paymentStatus === 'succeeded' ? (
-          <>
-            <CheckCircle className="w-5 h-5" />
-            Payment Complete
-          </>
+            Processing...
+          </span>
         ) : (
-          <>
-            <Lock className="w-5 h-5" />
-            Pay ${formattedAmount}
-          </>
+          <span>Pay ${formattedAmount}</span>
         )}
       </button>
-
-      {/* Loading State */}
-      {!stripe && (
-        <div className="bg-biotech-mint/10 border border-biotech-mint/20 rounded-lg p-4">
-          <div className="flex items-center justify-center gap-2">
-            <div className="w-4 h-4 border-2 border-biotech-mint/30 border-t-biotech-mint rounded-full animate-spin" />
-            <p className="text-sm text-biotech-mint">
-              Initializing secure payment system...
-            </p>
-          </div>
-        </div>
-      )}
     </form>
   );
 }
