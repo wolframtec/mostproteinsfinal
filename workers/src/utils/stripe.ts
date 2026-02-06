@@ -167,11 +167,6 @@ export async function createPaymentIntent(
       enabled: true,
       allow_redirects: 'never'
     },
-    payment_method_options: {
-      card: {
-        request_three_d_secure: 'automatic'
-      }
-    },
   };
   
   const response = await stripeAPI('/payment_intents', 'POST', requestBody, stripeKey);
