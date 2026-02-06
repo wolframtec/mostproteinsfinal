@@ -4,24 +4,24 @@ import ShopPage from '@/views/ShopPage';
 const siteUrl = 'https://mostproteins.com';
 
 export const metadata: Metadata = {
-  title: 'Shop | Research Peptides & Compounds',
+  title: 'Shop | Research Short Chain Proteins & Compounds',
   description:
-    'Browse our collection of high-purity research peptides and compounds. HPLC-tested with certificates of analysis. BPC-157, GHK-Cu, Epithalon, TB-500, and more.',
+    'Browse our collection of high-purity research short chain proteins and compounds. HPLC-tested with certificates of analysis. BPC-157, GHK-Cu, Epithalon, TB-500, and more.',
   keywords: [
-    'research peptides shop',
-    'buy research peptides',
+    'research short chain proteins shop',
+    'buy research short chain proteins',
     'BPC-157 for sale',
-    'GHK-Cu peptide',
+    'GHK-Cu short chain protein',
     'Epithalon research',
-    'TB-500 peptide',
+    'TB-500 short chain protein',
     'laboratory compounds',
-    'HPLC tested peptides',
+    'HPLC tested short chain proteins',
   ],
   alternates: { canonical: '/shop/' },
   openGraph: {
-    title: 'Shop Research Peptides | Most Proteins',
+    title: 'Shop Research Short Chain Proteins | Most Proteins',
     description:
-      'Browse our collection of high-purity research peptides. HPLC-tested with COA documentation.',
+      'Browse our collection of high-purity research short chain proteins. HPLC-tested with COA documentation.',
     url: '/shop/',
     type: 'website',
     images: [
@@ -29,14 +29,14 @@ export const metadata: Metadata = {
         url: '/images/bpc157-product.jpg',
         width: 1200,
         height: 630,
-        alt: 'Research peptides shop - Most Proteins',
+        alt: 'Research short chain proteins shop - Most Proteins',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Shop Research Peptides | Most Proteins',
-    description: 'Browse our collection of high-purity research peptides.',
+    description: 'Browse our collection of high-purity research short chain proteins.',
     images: ['/images/bpc157-product.jpg'],
   },
 };

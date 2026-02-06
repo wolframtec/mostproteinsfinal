@@ -4,10 +4,10 @@ export const PRODUCTS: Product[] = [
   {
     id: 'bpc-157',
     name: 'BPC-157 (5mg)',
-    description: 'Synthetic pentadecapeptide consisting of 15 amino acids. Research compound for laboratory studies on tissue repair mechanisms. Purity: ≥98% by HPLC.',
+    description: 'Synthetic pentadecapeptide short chain protein consisting of 15 amino acids. Research compound for laboratory studies on tissue repair mechanisms. Purity: ≥98% by HPLC.',
     price: 178,
     image: '/images/bpc157-product.jpg',
-    label: 'RESEARCH PEPTIDE',
+    label: 'RESEARCH SHORT CHAIN PROTEIN',
     iconKey: 'activity',
     casNumber: '137525-51-0',
     molecularWeight: '1419.5 g/mol',
@@ -18,7 +18,7 @@ export const PRODUCTS: Product[] = [
   {
     id: 'ghk-cu',
     name: 'GHK-Cu (50mg)',
-    description: 'Copper tripeptide-1 (glycyl-L-histidyl-L-lysine). Research compound for laboratory studies on extracellular matrix interactions. Purity: ≥99% by HPLC.',
+    description: 'Copper tripeptide-1 short chain protein (glycyl-L-histidyl-L-lysine). Research compound for laboratory studies on extracellular matrix interactions. Purity: ≥99% by HPLC.',
     price: 258,
     image: '/images/ghkcu-product.jpg',
     label: 'RESEARCH PEPTIDE',
@@ -32,7 +32,7 @@ export const PRODUCTS: Product[] = [
   {
     id: 'epithalon',
     name: 'Epithalon (20mg)',
-    description: 'Synthetic tetrapeptide (Ala-Glu-Asp-Gly). Research compound for laboratory studies on telomerase activity. Purity: ≥98% by HPLC.',
+    description: 'Synthetic tetrapeptide short chain protein (Ala-Glu-Asp-Gly). Research compound for laboratory studies on telomerase activity. Purity: ≥98% by HPLC.',
     price: 298,
     image: '/images/epithalon-product.jpg',
     label: 'RESEARCH PEPTIDE',

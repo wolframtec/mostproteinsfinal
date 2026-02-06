@@ -26,7 +26,7 @@ export default function ShopPage() {
               Research Compounds
             </h1>
             <p className="text-biotech-gray max-w-2xl mx-auto">
-              High-purity research peptides and compounds for laboratory studies. 
+              High-purity research short chain proteins and compounds for laboratory studies. 
               All products include HPLC testing documentation.
             </p>
           </div>

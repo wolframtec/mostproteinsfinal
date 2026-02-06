@@ -5,19 +5,19 @@ import { SiteOverlays } from './site-overlays';
 
 const siteUrl = 'https://mostproteins.com';
 const siteName = 'Most Proteins';
-const defaultDescription = 'Most Proteins provides research peptides and compounds with clear documentation and reliable handling. For research use only.';
+const defaultDescription = 'Most Proteins provides research short chain proteins and compounds with clear documentation and reliable handling. For research use only.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: `${siteName} | Research Peptides & Compounds`,
+    default: `${siteName} | Research Short Chain Proteins & Compounds`,
     template: `%s | ${siteName}`,
   },
   description: defaultDescription,
   keywords: [
-    'research peptides',
+    'research short chain proteins',
     'research compounds',
-    'peptide research',
+    'short chain protein research',
     'HPLC purity',
     'COA',
     'laboratory supplies',
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: `${siteName} | Research Peptides & Compounds`,
+    title: `${siteName} | Research Short Chain Proteins & Compounds`,
     description: defaultDescription,
     type: 'website',
     url: siteUrl,
@@ -61,7 +61,7 @@ export const metadata: Metadata = {
         url: '/images/bpc157-product.jpg',
         width: 1200,
         height: 630,
-        alt: 'Most Proteins - Research-grade peptides with HPLC purity certificates',
+        alt: 'Most Proteins - Research-grade short chain proteins with HPLC purity certificates',
         type: 'image/jpeg',
       },
     ],
@@ -153,7 +153,7 @@ const localBusinessSchema = {
         itemOffered: {
           '@type': 'Product',
           name: 'BPC-157',
-          description: 'Research peptide for tissue repair studies',
+          description: 'Research short chain protein for tissue repair studies',
         },
       },
       {
@@ -161,7 +161,7 @@ const localBusinessSchema = {
         itemOffered: {
           '@type': 'Product',
           name: 'GHK-Cu',
-          description: 'Copper peptide for matrix research',
+          description: 'Copper short chain protein for matrix research',
         },
       },
     ],
