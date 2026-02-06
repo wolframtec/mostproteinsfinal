@@ -132,6 +132,7 @@ function HomePageClient() {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeProductIndex, setActiveProductIndex] = useState(-1);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const router = useRouter();
   
   // Prevent unused variable warning when 3D scene is disabled
@@ -139,6 +140,13 @@ function HomePageClient() {
   const _scrollProgress = scrollProgress;
 
   const { count } = useCart();
+
+  const navLinks = [
+    { href: '/shop', label: 'Shop', highlight: true },
+    { href: '/', label: 'Products' },
+    { href: '/about', label: 'About' },
+    { href: '#subscribe', label: 'Contact' },
+  ];
 
   const mainRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
