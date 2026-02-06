@@ -1,6 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+
+declare global {
+  interface Window {
+    uetq?: Array<unknown>;
+  }
+}
 import { AlertTriangle, CheckCircle, Loader2, ArrowLeft, RefreshCw } from 'lucide-react';
 import { useCart } from '../context';
 import { paymentApi } from '../services/api';
@@ -47,6 +53,26 @@ export default function CheckoutCompletePage({ onBack, onRetry }: CheckoutComple
       });
       clearCart();
       localStorage.removeItem('last_checkout_attempt');
+      
+      // Bing conversion tracking
+      try {
+        const stored = localStorage.getItem('last_checkout_attempt');
+        let revenue = 0;
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          revenue = parsed?.amount || 0;
+        }
+        if (window.uetq) {
+          window.uetq.push('event', 'PRODUCT_PURCHASE', {
+            ecomm_prodid: orderId || 'unknown',
+            ecomm_pagetype: 'PURCHASE',
+            revenue_value: revenue,
+            currency: 'USD'
+          });
+        }
+      } catch (e) {
+        console.log('Conversion tracking error');
+      }
     };
 
     const finishFail = (text: string) => {
