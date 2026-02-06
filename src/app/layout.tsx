@@ -2,6 +2,7 @@ import './globals.css';
 import type { Metadata, Viewport } from 'next';
 import { Providers } from './providers';
 import { SiteOverlays } from './site-overlays';
+import IntercomChat from '@/components/IntercomChat';
 
 const siteUrl = 'https://mostproteins.com';
 const siteName = 'Most Proteins';
@@ -205,6 +206,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
           <SiteOverlays />
         </Providers>
+        <IntercomChat />
         
         {/* Structured Data */}
         <script
